@@ -3,7 +3,7 @@
 Name:           cloud-init
 Version:        0.6.2
 Release:        0.2.bzr450%{?dist}
-Summary:        EC2 instance init scripts
+Summary:        Cloud instance init scripts
 
 Group:          System Environment/Base
 License:        GPLv3
@@ -13,6 +13,10 @@ Source0:        %{name}-%{version}-bzr450.tar.gz
 Source1:        cloud-init-fedora.cfg
 Source2:        cloud-init-README.fedora
 Patch0:         cloud-init-0.6.2-fedora.patch
+
+# The current patch set is in flux as we stabilize cloud-init on Fedora.
+# It will be submitted upstream as soon as it becomes reasonable to do so.
+
 # Unbundle boto.utils (not yet upstream)
 Patch1:         cloud-init-0.6.2-botobundle.patch
 # Add systemd support (not yet upstream)
@@ -84,12 +88,10 @@ install -d $RPM_BUILD_ROOT/var/lib/cloud
 # We supply our own config file since our software differs from Ubuntu's.
 cp -p %{SOURCE1} $RPM_BUILD_ROOT/etc/cloud/cloud.cfg
 
-# /etc/rsyslog.d didn't exist by default until F15.
-# el6: https://bugzilla.redhat.com/show_bug.cgi?id=740420
-%if 0%{?fedora} > 14
+# Note that /etc/rsyslog.d didn't exist by default until F15.
+# el6 request: https://bugzilla.redhat.com/show_bug.cgi?id=740420
 install -d $RPM_BUILD_ROOT/etc/rsyslog.d
 cp -p tools/21-cloudinit.conf $RPM_BUILD_ROOT/etc/rsyslog.d/21-cloudinit.conf
-%endif
 
 # Install the systemd bits
 mkdir -p        $RPM_BUILD_ROOT/%{_unitdir}
