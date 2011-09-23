@@ -2,7 +2,7 @@
 
 Name:           cloud-init
 Version:        0.6.2
-Release:        0.2.bzr450%{?dist}
+Release:        0.3.bzr450%{?dist}
 Summary:        Cloud instance init scripts
 
 Group:          System Environment/Base
@@ -152,6 +152,9 @@ fi
 
 
 %changelog
+* Fri Sep 23 2011 Garrett Holmstrom <gholms@fedoraproject.org> - 0.6.2-0.3.bzr450
+- Fixed logfile permission checking
+
 * Fri Sep 23 2011 Garrett Holmstrom <gholms@fedoraproject.org> - 0.6.2-0.2.bzr450
 - Updated tzsysconfig patch
 
