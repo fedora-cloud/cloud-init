@@ -2,7 +2,7 @@
 
 Name:           cloud-init
 Version:        0.6.2
-Release:        0.1.bzr450%{?dist}
+Release:        0.2.bzr450%{?dist}
 Summary:        EC2 instance init scripts
 
 Group:          System Environment/Base
@@ -150,5 +150,8 @@ fi
 
 
 %changelog
+* Fri Sep 23 2011 Garrett Holmstrom <gholms@fedoraproject.org> - 0.6.2-0.2.bzr450
+- Updated tzsysconfig patch
+
 * Wed Sep 21 2011 Garrett Holmstrom <gholms@fedoraproject.org> - 0.6.2-0.1.bzr450
 - Initial packaging
