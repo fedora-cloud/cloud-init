@@ -31,6 +31,8 @@ Patch5:         cloud-init-0.6.2-tzsysconfig.patch
 Patch6:         cloud-init-0.6.2-puppetcontext.patch
 # Make enabling the puppet service work on Fedora (not yet upstream)
 Patch7:         cloud-init-0.6.2-puppetenable.patch
+# Make the types of SSH keys to generate configurable (not yet upstream)
+Patch8:         cloud-init-0.6.2-sshkeytypes.patch
 
 BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -69,6 +71,7 @@ ssh keys and to let the user run various scripts.
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
+%patch8 -p1
 
 cp -p %{SOURCE2} README.fedora
 
@@ -154,6 +157,7 @@ fi
 %changelog
 * Fri Sep 23 2011 Garrett Holmstrom <gholms@fedoraproject.org> - 0.6.2-0.3.bzr450
 - Fixed logfile permission checking
+- Fixed SSH key generation
 
 * Fri Sep 23 2011 Garrett Holmstrom <gholms@fedoraproject.org> - 0.6.2-0.2.bzr450
 - Updated tzsysconfig patch
