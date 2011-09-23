@@ -1,0 +1,86 @@
+Index: cloud-init/systemd/cloud-config.service
+===================================================================
+--- /dev/null
++++ cloud-init/systemd/cloud-config.service
+@@ -0,0 +1,13 @@
++[Unit]
++Description=Apply the settings specified in cloud-config
++After=network.target syslog.target cloud-config.target
++Requires=cloud-config.target
++Wants=network.target
++
++[Service]
++Type=oneshot
++ExecStart=/usr/bin/cloud-init-cfg all config
++RemainAfterExit=yes
++
++[Install]
++WantedBy=multi-user.target
+Index: cloud-init/systemd/cloud-config.target
+===================================================================
+--- /dev/null
++++ cloud-init/systemd/cloud-config.target
+@@ -0,0 +1,10 @@
++# cloud-init normally emits a "cloud-config" upstart event to inform third
++# parties that cloud-config is available, which does us no good when we're
++# using systemd.  cloud-config.target serves as this synchronization point
++# instead.  Services that would "start on cloud-config" with upstart can
++# instead use "After=cloud-config.target" and "Wants=cloud-config.target"
++# as appropriate.
++
++[Unit]
++Description=Cloud-config availability
++Requires=cloud-init-local.service cloud-init.service
+Index: cloud-init/systemd/cloud-final.service
+===================================================================
+--- /dev/null
++++ cloud-init/systemd/cloud-final.service
+@@ -0,0 +1,13 @@
++[Unit]
++Description=Execute cloud user/final scripts
++After=network.target syslog.target cloud-config.service rc-local.service
++Requires=cloud-config.target
++Wants=network.target
++
++[Service]
++Type=oneshot
++ExecStart=/usr/bin/cloud-init-cfg all final
++RemainAfterExit=yes
++
++[Install]
++WantedBy=multi-user.target
+Index: cloud-init/systemd/cloud-init-local.service
+===================================================================
+--- /dev/null
++++ cloud-init/systemd/cloud-init-local.service
+@@ -0,0 +1,12 @@
++[Unit]
++Description=Initial cloud-init job (pre-networking)
++Wants=local-fs.target
++After=local-fs.target
++
++[Service]
++Type=oneshot
++ExecStart=/usr/bin/cloud-init start-local
++RemainAfterExit=yes
++
++[Install]
++WantedBy=multi-user.target
+Index: cloud-init/systemd/cloud-init.service
+===================================================================
+--- /dev/null
++++ cloud-init/systemd/cloud-init.service
+@@ -0,0 +1,13 @@
++[Unit]
++Description=Initial cloud-init job (metadata service crawler)
++After=local-fs.target network.target cloud-init-local.service
++Requires=network.target
++Wants=local-fs.target
++
++[Service]
++Type=oneshot
++ExecStart=/usr/bin/cloud-init start
++RemainAfterExit=yes
++
++[Install]
++WantedBy=multi-user.target

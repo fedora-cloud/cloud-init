@@ -1,0 +1,12 @@
+The following cloud-init modules are currently unsupported on this OS:
+ - apt_update_upgrade ('apt_update', 'apt_upgrade', 'apt_mirror', 'apt_preserve_sources_list', 'apt_old_mirror', 'apt_sources', 'debconf_selections', 'packages' options)
+ - byobu ('byobu_fy_default' option)
+ - chef
+ - grub_dpkg
+ - mcollective
+ - set_hostname ('hostname' and 'fqdn' options)
+ - update_hostname
+
+Future work:
+ - 'hostname' and 'fqdn' support
+ - 'packages' and yum support

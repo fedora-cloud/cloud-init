@@ -1,0 +1,26 @@
+Index: cloud-init/cloudinit/SshUtil.py
+===================================================================
+--- cloud-init.orig/cloudinit/SshUtil.py
++++ cloud-init/cloudinit/SshUtil.py
+@@ -4,6 +4,12 @@ import os
+ import os.path
+ import cloudinit.util as util
+ 
++try:
++    import selinux
++    HAVE_LIBSELINUX = True
++except ImportError:
++    HAVE_LIBSELINUX = False
++
+ class AuthKeyEntry():
+     # lines are options, keytype, base64-encoded key, comment
+     # man page says the following which I did not understand:
+@@ -147,6 +153,8 @@ def setup_user_keys(keys, user, key_pref
+     util.write_file(authorized_keys, content, 0600)
+ 
+     os.chown(authorized_keys, pwent.pw_uid, pwent.pw_gid)
++    if HAVE_LIBSELINUX and selinux.is_selinux_enabled():
++        selinux.restorecon(ssh_dir, recursive=True)
+ 
+     os.umask(saved_umask)
+ 
