@@ -151,9 +151,7 @@ fi
 %doc %{_datadir}/doc/%{name}
 %dir %{_sharedstatedir}/cloud
 
-%if 0%{?fedora} > 14
 %config(noreplace) %{_sysconfdir}/rsyslog.d/21-cloudinit.conf
-%endif
 
 
 %changelog
