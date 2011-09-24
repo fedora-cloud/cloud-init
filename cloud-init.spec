@@ -2,7 +2,7 @@
 
 Name:           cloud-init
 Version:        0.6.2
-Release:        0.3.bzr450%{?dist}
+Release:        0.4.bzr450%{?dist}
 Summary:        Cloud instance init scripts
 
 Group:          System Environment/Base
@@ -91,17 +91,17 @@ cp -p %{SOURCE2} README.fedora
 rm -rf $RPM_BUILD_ROOT
 %{__python} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
 
-for x in $RPM_BUILD_ROOT/usr/bin/*.py; do mv "$x" "${x%.py}"; done
+for x in $RPM_BUILD_ROOT/%{_bindir}/*.py; do mv "$x" "${x%.py}"; done
 chmod +x $RPM_BUILD_ROOT/%{python_sitelib}/cloudinit/SshUtil.py
-install -d $RPM_BUILD_ROOT/var/lib/cloud
+mkdir -p $RPM_BUILD_ROOT/%{_sharedstatedir}/cloud
 
 # We supply our own config file since our software differs from Ubuntu's.
-cp -p %{SOURCE1} $RPM_BUILD_ROOT/etc/cloud/cloud.cfg
+cp -p %{SOURCE1} $RPM_BUILD_ROOT/%{_sysconfdir}/cloud/cloud.cfg
 
 # Note that /etc/rsyslog.d didn't exist by default until F15.
 # el6 request: https://bugzilla.redhat.com/show_bug.cgi?id=740420
-install -d $RPM_BUILD_ROOT/etc/rsyslog.d
-cp -p tools/21-cloudinit.conf $RPM_BUILD_ROOT/etc/rsyslog.d/21-cloudinit.conf
+mkdir -p $RPM_BUILD_ROOT/%{_sysconfdir}/rsyslog.d
+cp -p tools/21-cloudinit.conf $RPM_BUILD_ROOT/%{_sysconfdir}/rsyslog.d/21-cloudinit.conf
 
 # Install the systemd bits
 mkdir -p        $RPM_BUILD_ROOT/%{_unitdir}
@@ -139,12 +139,12 @@ fi
 
 %files
 %doc ChangeLog LICENSE TODO README.fedora
-%config(noreplace) /etc/cloud/cloud.cfg
-%dir               /etc/cloud/cloud.cfg.d
-%config(noreplace) /etc/cloud/cloud.cfg.d/*.cfg
-%doc               /etc/cloud/cloud.cfg.d/README
-%dir               /etc/cloud/templates
-%config(noreplace) /etc/cloud/templates/*
+%config(noreplace) %{_sysconfdir}/cloud/cloud.cfg
+%dir               %{_sysconfdir}/cloud/cloud.cfg.d
+%config(noreplace) %{_sysconfdir}/cloud/cloud.cfg.d/*.cfg
+%doc               %{_sysconfdir}/cloud/cloud.cfg.d/README
+%dir               %{_sysconfdir}/cloud/templates
+%config(noreplace) %{_sysconfdir}/cloud/templates/*
 %{_unitdir}/cloud-config.service
 %{_unitdir}/cloud-config.target
 %{_unitdir}/cloud-final.service
@@ -152,16 +152,19 @@ fi
 %{_unitdir}/cloud-init.service
 %{python_sitelib}/*
 %{_libexecdir}/%{name}
-/usr/bin/cloud-init*
-%doc /usr/share/doc/%{name}
-%dir /var/lib/cloud
+%{_bindir}/cloud-init*
+%doc %{_datadir}/doc/%{name}
+%dir %{_sharedstatedir}/cloud
 
 %if 0%{?fedora} > 14
-%config(noreplace) /etc/rsyslog.d/21-cloudinit.conf
+%config(noreplace) %{_sysconfdir}/rsyslog.d/21-cloudinit.conf
 %endif
 
 
 %changelog
+* Fri Sep 23 2011 Garrett Holmstrom <gholms@fedoraproject.org> - 0.6.2-0.4.bzr450
+- Added more macros to the spec file
+
 * Fri Sep 23 2011 Garrett Holmstrom <gholms@fedoraproject.org> - 0.6.2-0.3.bzr450
 - Fixed logfile permission checking
 - Fixed SSH key generation
