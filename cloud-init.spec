@@ -2,7 +2,7 @@
 
 Name:           cloud-init
 Version:        0.6.2
-Release:        0.1.bzr457%{?dist}
+Release:        0.5.bzr457%{?dist}
 Summary:        Cloud instance init scripts
 
 Group:          System Environment/Base
@@ -155,7 +155,7 @@ fi
 
 
 %changelog
-* Sat Sep 24 2011 Garrett Holmstrom <gholms@fedoraproject.org> - 0.6.2-0.1.bzr457
+* Sat Sep 24 2011 Garrett Holmstrom <gholms@fedoraproject.org> - 0.6.2-0.5.bzr457
 - Rebased against upstream rev 457
 - Added missing dependencies
 
