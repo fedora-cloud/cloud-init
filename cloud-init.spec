@@ -163,6 +163,7 @@ fi
 - Fixed SSH key generation
 - Fixed a bad method call in FQDN-guessing [LP:857891]
 - Updated localefile patch
+- Disabled the grub_dpkg module
 
 * Fri Sep 23 2011 Garrett Holmstrom <gholms@fedoraproject.org> - 0.6.2-0.2.bzr450
 - Updated tzsysconfig patch
