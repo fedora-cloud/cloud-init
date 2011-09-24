@@ -25,7 +25,7 @@ Index: cloud-init/cloudinit/CloudConfig/cc_locale.py
  
  def handle(name,cfg,cloud,log,args):
      if len(args) != 0:
-@@ -32,6 +34,9 @@ def handle(name,cfg,cloud,log,args):
+@@ -32,12 +34,15 @@ def handle(name,cfg,cloud,log,args):
      else:
          locale = util.get_cfg_option_str(cfg,"locale",cloud.get_locale())
  
@@ -35,3 +35,10 @@ Index: cloud-init/cloudinit/CloudConfig/cc_locale.py
      if not locale: return
  
      log.debug("setting locale to %s" % locale)
+ 
+     try:
+-        apply_locale(locale)
++        apply_locale(locale, locale_cfgfile)
+     except Exception as e:
+         log.debug(traceback.format_exc(e))
+         raise Exception("failed to apply locale %s" % locale)
