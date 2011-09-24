@@ -49,8 +49,10 @@ Requires:       python-boto
 Requires:       python-cheetah
 Requires:       python-configobj
 Requires:       PyYAML
+Requires:       rsyslog
 Requires:       shadow-utils
 Requires:       xfsprogs
+Requires:       /usr/bin/run-parts
 Requires(post):   systemd-units
 Requires(preun):  systemd-units
 Requires(postun): systemd-units
@@ -157,6 +159,7 @@ fi
 %changelog
 * Sat Sep 24 2011 Garrett Holmstrom <gholms@fedoraproject.org> - 0.6.2-0.1.bzr457
 - Rebased against upstream rev 457
+- Added missing dependencies
 
 * Fri Sep 23 2011 Garrett Holmstrom <gholms@fedoraproject.org> - 0.6.2-0.4.bzr450
 - Added more macros to the spec file
