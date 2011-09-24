@@ -35,6 +35,8 @@ Patch7:         cloud-init-0.6.2-puppetenable.patch
 Patch8:         cloud-init-0.6.2-sshkeytypes.patch
 # https://bugs.launchpad.net/cloud-init/+bug/857891
 Patch9:         cloud-init-0.6.2-fqdnargs.patch
+# https://bugs.launchpad.net/cloud-init/+bug/857926
+Patch10:        cloud-init-0.6.2-runparts-emptydir.patch
 
 BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -75,6 +77,7 @@ ssh keys and to let the user run various scripts.
 %patch7 -p1
 %patch8 -p1
 %patch9 -p1
+%patch10 -p1
 
 cp -p %{SOURCE2} README.fedora
 
@@ -164,6 +167,7 @@ fi
 - Fixed a bad method call in FQDN-guessing [LP:857891]
 - Updated localefile patch
 - Disabled the grub_dpkg module
+- Fixed failures due to empty script dirs [LP:857926]
 
 * Fri Sep 23 2011 Garrett Holmstrom <gholms@fedoraproject.org> - 0.6.2-0.2.bzr450
 - Updated tzsysconfig patch
