@@ -33,6 +33,8 @@ Patch6:         cloud-init-0.6.2-puppetcontext.patch
 Patch7:         cloud-init-0.6.2-puppetenable.patch
 # Make the types of SSH keys to generate configurable (not yet upstream)
 Patch8:         cloud-init-0.6.2-sshkeytypes.patch
+# https://bugs.launchpad.net/cloud-init/+bug/857891
+Patch9:         cloud-init-0.6.2-fqdnargs.patch
 
 BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -72,6 +74,7 @@ ssh keys and to let the user run various scripts.
 %patch6 -p1
 %patch7 -p1
 %patch8 -p1
+%patch9 -p1
 
 cp -p %{SOURCE2} README.fedora
 
@@ -158,6 +161,7 @@ fi
 * Fri Sep 23 2011 Garrett Holmstrom <gholms@fedoraproject.org> - 0.6.2-0.3.bzr450
 - Fixed logfile permission checking
 - Fixed SSH key generation
+- Fixed a bad method call in FQDN-guessing [LP:857891]
 
 * Fri Sep 23 2011 Garrett Holmstrom <gholms@fedoraproject.org> - 0.6.2-0.2.bzr450
 - Updated tzsysconfig patch
