@@ -17,7 +17,8 @@ Patch0:         cloud-init-0.6.2-fedora.patch
 # The current patch set is in flux as we stabilize cloud-init on Fedora.
 # It will be submitted upstream as soon as it becomes reasonable to do so.
 
-# Unbundle boto.utils (not yet upstream)
+# Unbundle boto.utils
+# https://bugs.launchpad.net/cloud-init/+bug/855965
 Patch1:         cloud-init-0.6.2-botobundle.patch
 # Add systemd support (not yet upstream)
 Patch2:         cloud-init-0.6.2-systemd.patch
