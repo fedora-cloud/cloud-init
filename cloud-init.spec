@@ -2,14 +2,14 @@
 
 Name:           cloud-init
 Version:        0.6.2
-Release:        0.4.bzr450%{?dist}
+Release:        0.1.bzr457%{?dist}
 Summary:        Cloud instance init scripts
 
 Group:          System Environment/Base
 License:        GPLv3
 URL:            http://launchpad.net/cloud-init
-# bzr export -r 450 cloud-init-0.6.2-bzr450.tar.gz lp:cloud-init
-Source0:        %{name}-%{version}-bzr450.tar.gz
+# bzr export -r 457 cloud-init-0.6.2-bzr457.tar.gz lp:cloud-init
+Source0:        %{name}-%{version}-bzr457.tar.gz
 Source1:        cloud-init-fedora.cfg
 Source2:        cloud-init-README.fedora
 Patch0:         cloud-init-0.6.2-fedora.patch
@@ -17,9 +17,6 @@ Patch0:         cloud-init-0.6.2-fedora.patch
 # The current patch set is in flux as we stabilize cloud-init on Fedora.
 # It will be submitted upstream as soon as it becomes reasonable to do so.
 
-# Unbundle boto.utils
-# https://bugs.launchpad.net/cloud-init/+bug/855965
-Patch1:         cloud-init-0.6.2-botobundle.patch
 # Add systemd support (not yet upstream)
 Patch2:         cloud-init-0.6.2-systemd.patch
 # Restore SSH files' selinux contexts (not yet upstream)
@@ -34,8 +31,6 @@ Patch6:         cloud-init-0.6.2-puppetcontext.patch
 Patch7:         cloud-init-0.6.2-puppetenable.patch
 # Make the types of SSH keys to generate configurable (not yet upstream)
 Patch8:         cloud-init-0.6.2-sshkeytypes.patch
-# https://bugs.launchpad.net/cloud-init/+bug/857891
-Patch9:         cloud-init-0.6.2-fqdnargs.patch
 # https://bugs.launchpad.net/cloud-init/+bug/857926
 Patch10:        cloud-init-0.6.2-runparts-emptydir.patch
 
@@ -67,9 +62,8 @@ ssh keys and to let the user run various scripts.
 
 
 %prep
-%setup -q -n %{name}-%{version}-bzr450
+%setup -q -n %{name}-%{version}-bzr457
 %patch0 -p1
-%patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
@@ -77,7 +71,6 @@ ssh keys and to let the user run various scripts.
 %patch6 -p1
 %patch7 -p1
 %patch8 -p1
-%patch9 -p1
 %patch10 -p1
 
 cp -p %{SOURCE2} README.fedora
@@ -162,6 +155,9 @@ fi
 
 
 %changelog
+* Sat Sep 24 2011 Garrett Holmstrom <gholms@fedoraproject.org> - 0.6.2-0.1.bzr457
+- Rebased against upstream rev 457
+
 * Fri Sep 23 2011 Garrett Holmstrom <gholms@fedoraproject.org> - 0.6.2-0.4.bzr450
 - Added more macros to the spec file
 
