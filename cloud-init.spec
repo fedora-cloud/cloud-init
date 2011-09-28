@@ -2,7 +2,7 @@
 
 Name:           cloud-init
 Version:        0.6.2
-Release:        0.5.bzr457%{?dist}
+Release:        0.6.bzr457%{?dist}
 Summary:        Cloud instance init scripts
 
 Group:          System Environment/Base
@@ -19,14 +19,12 @@ Patch0:         cloud-init-0.6.2-fedora.patch
 
 # Add systemd support (not yet upstream)
 Patch2:         cloud-init-0.6.2-systemd.patch
-# Restore SSH files' selinux contexts (not yet upstream)
-Patch3:         cloud-init-0.6.2-sshcontext.patch
+# Restore created files' selinux contexts (not yet upstream)
+Patch3:         cloud-init-0.6.2-filecontext.patch
 # Make locale file location configurable (not yet upstream)
 Patch4:         cloud-init-0.6.2-localefile.patch
 # Write timezone data to /etc/sysconfig/clock (not yet upstream)
 Patch5:         cloud-init-0.6.2-tzsysconfig.patch
-# Restore puppet files' selinux contexts (not yet upstream)
-Patch6:         cloud-init-0.6.2-puppetcontext.patch
 # Make enabling the puppet service work on Fedora (not yet upstream)
 Patch7:         cloud-init-0.6.2-puppetenable.patch
 # Make the types of SSH keys to generate configurable (not yet upstream)
@@ -70,7 +68,6 @@ ssh keys and to let the user run various scripts.
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
-%patch6 -p1
 %patch7 -p1
 %patch8 -p1
 %patch10 -p1
@@ -155,6 +152,9 @@ fi
 
 
 %changelog
+* Wed Sep 28 2011 Garrett Holmstrom <gholms@fedoraproject.org> - 0.6.2-0.6.bzr457
+- Consolidated selinux file context patches
+
 * Sat Sep 24 2011 Garrett Holmstrom <gholms@fedoraproject.org> - 0.6.2-0.5.bzr457
 - Rebased against upstream rev 457
 - Added missing dependencies

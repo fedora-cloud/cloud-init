@@ -2,7 +2,7 @@ Index: cloud-init/cloudinit/util.py
 ===================================================================
 --- cloud-init.orig/cloudinit/util.py
 +++ cloud-init/cloudinit/util.py
-@@ -133,7 +133,8 @@ def getkeybyid(keyid,keyserver):
+@@ -145,7 +145,8 @@ def getkeybyid(keyid,keyserver):
  
  def runparts(dirp, skip_no_exist=True):
      if skip_no_exist and not os.path.isdir(dirp): return

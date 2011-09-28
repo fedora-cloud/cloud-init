@@ -21,7 +21,7 @@ Index: cloud-init/cloudinit/util.py
 ===================================================================
 --- cloud-init.orig/cloudinit/util.py
 +++ cloud-init/cloudinit/util.py
-@@ -77,6 +77,7 @@ def get_cfg_option_str(yobj, key, defaul
+@@ -84,6 +84,7 @@ def get_cfg_option_str(yobj, key, defaul
  
  def get_cfg_option_list_or_str(yobj, key, default=None):
      if not yobj.has_key(key): return default

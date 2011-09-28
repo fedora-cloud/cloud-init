@@ -10,10 +10,10 @@ Index: cloud-init/cloudinit/CloudConfig/cc_puppet.py
  import pwd
  import socket
  import subprocess
-@@ -91,10 +92,15 @@ def handle(name,cfg,cloud,log,args):
+@@ -84,10 +85,15 @@ def handle(name,cfg,cloud,log,args):
+             with open('/etc/puppet/puppet.conf', 'wb') as configfile:
                  puppet_config.write(configfile)
-             if HAVE_LIBSELINUX and selinux.is_selinux_enabled():
-                 selinux.restorecon('/etc/puppet/puppet.conf')
+             util.restorecon_if_possible('/etc/puppet/puppet.conf')
 -    # Set puppet default file to automatically start
 -    subprocess.check_call(['sed', '-i',
 -                           '-e', 's/^START=.*/START=yes/',
