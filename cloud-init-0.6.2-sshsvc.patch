@@ -1,0 +1,44 @@
+Index: cloud-init-fedora/cloudinit/CloudConfig/cc_set_passwords.py
+===================================================================
+--- cloud-init-fedora.orig/cloudinit/CloudConfig/cc_set_passwords.py
++++ cloud-init-fedora/cloudinit/CloudConfig/cc_set_passwords.py
+@@ -104,7 +104,7 @@ def handle(name,cfg,cloud,log,args):
+             errors.append(e)
+ 
+         try:
+-            p = util.subp(['service', 'ssh', 'restart'])
++            p = util.subp(['service', cfg.get('ssh_svcname', 'ssh'), 'restart'])
+             log.debug("restarted sshd")
+         except:
+             log.warn("restart of ssh failed")
+Index: cloud-init-fedora/cloudinit/CloudConfig/cc_ssh.py
+===================================================================
+--- cloud-init-fedora.orig/cloudinit/CloudConfig/cc_ssh.py
++++ cloud-init-fedora/cloudinit/CloudConfig/cc_ssh.py
+@@ -31,9 +31,10 @@ def handle(name,cfg,cloud,log,args):
+     global_log = log
+ 
+     # remove the static keys from the pristine image
+-    for f in glob.glob("/etc/ssh/ssh_host_*key*"):
+-        try: os.unlink(f)
+-        except: pass
++    if cfg.get("delete_system_ssh_keys", True):
++        for f in glob.glob("/etc/ssh/ssh_host_*key*"):
++            try: os.unlink(f)
++            except: pass
+ 
+     if cfg.has_key("ssh_keys"):
+         # if there are keys in cloud-config, use them
+@@ -63,8 +64,10 @@ def handle(name,cfg,cloud,log,args):
+         # if not, generate them
+         for keytype in util.get_cfg_option_list_or_str(cfg, 'ssh_genkeytypes',
+                                                        ['rsa', 'dsa', 'ecdsa']):
+-            subprocess.call(['ssh-keygen', '-t', keytype, '-N', '',
+-                             '-f', '/etc/ssh/ssh_host_%s_key' % keytype])
++            keyfile = '/etc/ssh/ssh_host_%s_key' % keytype
++            if not os.path.exists(keyfile):
++                subprocess.call(['ssh-keygen', '-t', keytype, '-N', '',
++                                 '-f', keyfile])
+ 
+     try:
+         user = util.get_cfg_option_str(cfg,'user')

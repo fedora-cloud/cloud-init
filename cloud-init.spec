@@ -31,6 +31,8 @@ Patch7:         cloud-init-0.6.2-puppetenable.patch
 Patch8:         cloud-init-0.6.2-sshkeytypes.patch
 # https://bugs.launchpad.net/cloud-init/+bug/857926
 Patch10:        cloud-init-0.6.2-runparts-emptydir.patch
+# Deal with differences between out sshd service and Ubuntu's (not yet upstream)
+Patch11:        cloud-init-0.6.2-sshsvc.patch
 
 BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -71,6 +73,7 @@ ssh keys and to let the user run various scripts.
 %patch7 -p1
 %patch8 -p1
 %patch10 -p1
+%patch11 -p1
 
 cp -p %{SOURCE2} README.fedora
 
@@ -156,6 +159,7 @@ fi
 - Consolidated selinux file context patches
 - Fixed cloud-init.service dependencies
 - Updated sshkeytypes patch
+- Dealt with differences from Ubuntu's sshd
 
 * Sat Sep 24 2011 Garrett Holmstrom <gholms@fedoraproject.org> - 0.6.2-0.5.bzr457
 - Rebased against upstream rev 457
