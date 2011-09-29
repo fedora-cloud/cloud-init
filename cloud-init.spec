@@ -155,6 +155,7 @@ fi
 * Wed Sep 28 2011 Garrett Holmstrom <gholms@fedoraproject.org> - 0.6.2-0.6.bzr457
 - Consolidated selinux file context patches
 - Fixed cloud-init.service dependencies
+- Updated sshkeytypes patch
 
 * Sat Sep 24 2011 Garrett Holmstrom <gholms@fedoraproject.org> - 0.6.2-0.5.bzr457
 - Rebased against upstream rev 457

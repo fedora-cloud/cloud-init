@@ -2,6 +2,15 @@ Index: cloud-init/cloudinit/CloudConfig/cc_ssh.py
 ===================================================================
 --- cloud-init.orig/cloudinit/CloudConfig/cc_ssh.py
 +++ cloud-init/cloudinit/CloudConfig/cc_ssh.py
+@@ -31,7 +31,7 @@ def handle(name,cfg,cloud,log,args):
+     global_log = log
+ 
+     # remove the static keys from the pristine image
+-    for f in glob.glob("/etc/ssh/ssh_host_*_key*"):
++    for f in glob.glob("/etc/ssh/ssh_host_*key*"):
+         try: os.unlink(f)
+         except: pass
+ 
 @@ -61,10 +61,10 @@ def handle(name,cfg,cloud,log,args):
              log.debug("generated %s from %s" % pair)
      else:
@@ -17,6 +26,18 @@ Index: cloud-init/cloudinit/CloudConfig/cc_ssh.py
  
      try:
          user = util.get_cfg_option_str(cfg,'user')
+@@ -82,11 +82,6 @@ def handle(name,cfg,cloud,log,args):
+         util.logexc(log)
+         log.warn("applying credentials failed!\n")
+ 
+-    send_ssh_keys_to_console()
+-
+-def send_ssh_keys_to_console():
+-    subprocess.call(('/usr/libexec/cloud-init/write-ssh-key-fingerprints',))
+-
+ def apply_credentials(keys, user, disable_root, disable_root_opts=DISABLE_ROOT_OPTS, log=global_log):
+     keys = set(keys)
+     if user:
 Index: cloud-init/cloudinit/util.py
 ===================================================================
 --- cloud-init.orig/cloudinit/util.py
