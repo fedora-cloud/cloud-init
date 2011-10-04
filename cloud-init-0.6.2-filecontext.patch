@@ -1,7 +1,48 @@
-Index: cloud-init/cloudinit/SshUtil.py
+Index: cloud-init-fedora/cloudinit/CloudConfig/cc_puppet.py
 ===================================================================
---- cloud-init.orig/cloudinit/SshUtil.py
-+++ cloud-init/cloudinit/SshUtil.py
+--- cloud-init-fedora.orig/cloudinit/CloudConfig/cc_puppet.py
++++ cloud-init-fedora/cloudinit/CloudConfig/cc_puppet.py
+@@ -22,6 +22,7 @@ import subprocess
+ import StringIO
+ import ConfigParser
+ import cloudinit.CloudConfig as cc
++import cloudinit.util as util
+ 
+ def handle(name,cfg,cloud,log,args):
+     # If there isn't a puppet key in the configuration don't do anything
+@@ -58,6 +59,7 @@ def handle(name,cfg,cloud,log,args):
+                 ca_fh.close()
+                 os.chown('/var/lib/puppet/ssl/certs/ca.pem',
+                          pwd.getpwnam('puppet').pw_uid, 0)
++                util.restorecon_if_possible('/var/lib/puppet', recursive=True)
+             else:
+                 #puppet_conf_fh.write("\n[%s]\n" % (cfg_name))
+                 # If puppet.conf already has this section we don't want to write it again
+@@ -81,6 +83,7 @@ def handle(name,cfg,cloud,log,args):
+             os.rename('/etc/puppet/puppet.conf','/etc/puppet/puppet.conf.old')
+             with open('/etc/puppet/puppet.conf', 'wb') as configfile:
+                 puppet_config.write(configfile)
++            util.restorecon_if_possible('/etc/puppet/puppet.conf')
+     # Set puppet default file to automatically start
+     subprocess.check_call(['sed', '-i',
+                            '-e', 's/^START=.*/START=yes/',
+Index: cloud-init-fedora/cloudinit/CloudConfig/cc_ssh.py
+===================================================================
+--- cloud-init-fedora.orig/cloudinit/CloudConfig/cc_ssh.py
++++ cloud-init-fedora/cloudinit/CloudConfig/cc_ssh.py
+@@ -66,6 +66,8 @@ def handle(name,cfg,cloud,log,args):
+         genkeys+='ssh-keygen -f /etc/ssh/ssh_host_ecdsa_key -t ecdsa -N ""; '
+         subprocess.call(('sh', '-c', "{ %s } </dev/null" % (genkeys)))
+ 
++    util.restorecon_if_possible('/etc/ssh', recursive=True)
++
+     try:
+         user = util.get_cfg_option_str(cfg,'user')
+         disable_root = util.get_cfg_option_bool(cfg, "disable_root", True)
+Index: cloud-init-fedora/cloudinit/SshUtil.py
+===================================================================
+--- cloud-init-fedora.orig/cloudinit/SshUtil.py
++++ cloud-init-fedora/cloudinit/SshUtil.py
 @@ -147,6 +147,7 @@ def setup_user_keys(keys, user, key_pref
      util.write_file(authorized_keys, content, 0600)
  
@@ -10,10 +51,10 @@ Index: cloud-init/cloudinit/SshUtil.py
  
      os.umask(saved_umask)
  
-Index: cloud-init/cloudinit/util.py
+Index: cloud-init-fedora/cloudinit/util.py
 ===================================================================
---- cloud-init.orig/cloudinit/util.py
-+++ cloud-init/cloudinit/util.py
+--- cloud-init-fedora.orig/cloudinit/util.py
++++ cloud-init-fedora/cloudinit/util.py
 @@ -28,6 +28,12 @@ import time
  import traceback
  import re
@@ -39,31 +80,3 @@ Index: cloud-init/cloudinit/util.py
  
  # get keyid from keyserver
  def getkeybyid(keyid,keyserver):
-Index: cloud-init/cloudinit/CloudConfig/cc_puppet.py
-===================================================================
---- cloud-init.orig/cloudinit/CloudConfig/cc_puppet.py
-+++ cloud-init/cloudinit/CloudConfig/cc_puppet.py
-@@ -22,6 +22,7 @@ import subprocess
- import StringIO
- import ConfigParser
- import cloudinit.CloudConfig as cc
-+import cloudinit.util as util
- 
- def handle(name,cfg,cloud,log,args):
-     # If there isn't a puppet key in the configuration don't do anything
-@@ -58,6 +59,7 @@ def handle(name,cfg,cloud,log,args):
-                 ca_fh.close()
-                 os.chown('/var/lib/puppet/ssl/certs/ca.pem',
-                          pwd.getpwnam('puppet').pw_uid, 0)
-+                util.restorecon_if_possible('/var/lib/puppet', recursive=True)
-             else:
-                 #puppet_conf_fh.write("\n[%s]\n" % (cfg_name))
-                 # If puppet.conf already has this section we don't want to write it again
-@@ -81,6 +83,7 @@ def handle(name,cfg,cloud,log,args):
-             os.rename('/etc/puppet/puppet.conf','/etc/puppet/puppet.conf.old')
-             with open('/etc/puppet/puppet.conf', 'wb') as configfile:
-                 puppet_config.write(configfile)
-+            util.restorecon_if_possible('/etc/puppet/puppet.conf')
-     # Set puppet default file to automatically start
-     subprocess.check_call(['sed', '-i',
-                            '-e', 's/^START=.*/START=yes/',

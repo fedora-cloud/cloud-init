@@ -40,5 +40,5 @@ Index: cloud-init-fedora/cloudinit/CloudConfig/cc_ssh.py
 +                subprocess.call(['ssh-keygen', '-t', keytype, '-N', '',
 +                                 '-f', keyfile])
  
-     try:
-         user = util.get_cfg_option_str(cfg,'user')
+     util.restorecon_if_possible('/etc/ssh', recursive=True)
+ 

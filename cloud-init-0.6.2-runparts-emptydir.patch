@@ -1,7 +1,7 @@
-Index: cloud-init/cloudinit/util.py
+Index: cloud-init-fedora/cloudinit/util.py
 ===================================================================
---- cloud-init.orig/cloudinit/util.py
-+++ cloud-init/cloudinit/util.py
+--- cloud-init-fedora.orig/cloudinit/util.py
++++ cloud-init-fedora/cloudinit/util.py
 @@ -145,7 +145,8 @@ def getkeybyid(keyid,keyserver):
  
  def runparts(dirp, skip_no_exist=True):

@@ -1,7 +1,7 @@
-Index: cloud-init/systemd/cloud-config.service
+Index: cloud-init-fedora/systemd/cloud-config.service
 ===================================================================
 --- /dev/null
-+++ cloud-init/systemd/cloud-config.service
++++ cloud-init-fedora/systemd/cloud-config.service
 @@ -0,0 +1,13 @@
 +[Unit]
 +Description=Apply the settings specified in cloud-config
@@ -16,10 +16,10 @@ Index: cloud-init/systemd/cloud-config.service
 +
 +[Install]
 +WantedBy=multi-user.target
-Index: cloud-init/systemd/cloud-config.target
+Index: cloud-init-fedora/systemd/cloud-config.target
 ===================================================================
 --- /dev/null
-+++ cloud-init/systemd/cloud-config.target
++++ cloud-init-fedora/systemd/cloud-config.target
 @@ -0,0 +1,10 @@
 +# cloud-init normally emits a "cloud-config" upstart event to inform third
 +# parties that cloud-config is available, which does us no good when we're
@@ -31,10 +31,10 @@ Index: cloud-init/systemd/cloud-config.target
 +[Unit]
 +Description=Cloud-config availability
 +Requires=cloud-init-local.service cloud-init.service
-Index: cloud-init/systemd/cloud-final.service
+Index: cloud-init-fedora/systemd/cloud-final.service
 ===================================================================
 --- /dev/null
-+++ cloud-init/systemd/cloud-final.service
++++ cloud-init-fedora/systemd/cloud-final.service
 @@ -0,0 +1,13 @@
 +[Unit]
 +Description=Execute cloud user/final scripts
@@ -49,10 +49,10 @@ Index: cloud-init/systemd/cloud-final.service
 +
 +[Install]
 +WantedBy=multi-user.target
-Index: cloud-init/systemd/cloud-init-local.service
+Index: cloud-init-fedora/systemd/cloud-init-local.service
 ===================================================================
 --- /dev/null
-+++ cloud-init/systemd/cloud-init-local.service
++++ cloud-init-fedora/systemd/cloud-init-local.service
 @@ -0,0 +1,12 @@
 +[Unit]
 +Description=Initial cloud-init job (pre-networking)
@@ -66,10 +66,10 @@ Index: cloud-init/systemd/cloud-init-local.service
 +
 +[Install]
 +WantedBy=multi-user.target
-Index: cloud-init/systemd/cloud-init.service
+Index: cloud-init-fedora/systemd/cloud-init.service
 ===================================================================
 --- /dev/null
-+++ cloud-init/systemd/cloud-init.service
++++ cloud-init-fedora/systemd/cloud-init.service
 @@ -0,0 +1,13 @@
 +[Unit]
 +Description=Initial cloud-init job (metadata service crawler)

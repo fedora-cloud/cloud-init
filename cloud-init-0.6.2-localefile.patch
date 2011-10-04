@@ -1,7 +1,7 @@
-Index: cloud-init/cloudinit/CloudConfig/cc_locale.py
+Index: cloud-init-fedora/cloudinit/CloudConfig/cc_locale.py
 ===================================================================
---- cloud-init.orig/cloudinit/CloudConfig/cc_locale.py
-+++ cloud-init/cloudinit/CloudConfig/cc_locale.py
+--- cloud-init-fedora.orig/cloudinit/CloudConfig/cc_locale.py
++++ cloud-init-fedora/cloudinit/CloudConfig/cc_locale.py
 @@ -16,15 +16,17 @@
  #    You should have received a copy of the GNU General Public License
  #    along with this program.  If not, see <http://www.gnu.org/licenses/>.

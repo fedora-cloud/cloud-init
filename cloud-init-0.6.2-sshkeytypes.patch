@@ -1,7 +1,7 @@
-Index: cloud-init/cloudinit/CloudConfig/cc_ssh.py
+Index: cloud-init-fedora/cloudinit/CloudConfig/cc_ssh.py
 ===================================================================
---- cloud-init.orig/cloudinit/CloudConfig/cc_ssh.py
-+++ cloud-init/cloudinit/CloudConfig/cc_ssh.py
+--- cloud-init-fedora.orig/cloudinit/CloudConfig/cc_ssh.py
++++ cloud-init-fedora/cloudinit/CloudConfig/cc_ssh.py
 @@ -31,7 +31,7 @@ def handle(name,cfg,cloud,log,args):
      global_log = log
  
@@ -24,9 +24,9 @@ Index: cloud-init/cloudinit/CloudConfig/cc_ssh.py
 +            subprocess.call(['ssh-keygen', '-t', keytype, '-N', '',
 +                             '-f', '/etc/ssh/ssh_host_%s_key' % keytype])
  
-     try:
-         user = util.get_cfg_option_str(cfg,'user')
-@@ -82,11 +82,6 @@ def handle(name,cfg,cloud,log,args):
+     util.restorecon_if_possible('/etc/ssh', recursive=True)
+ 
+@@ -84,11 +84,6 @@ def handle(name,cfg,cloud,log,args):
          util.logexc(log)
          log.warn("applying credentials failed!\n")
  
@@ -38,10 +38,10 @@ Index: cloud-init/cloudinit/CloudConfig/cc_ssh.py
  def apply_credentials(keys, user, disable_root, disable_root_opts=DISABLE_ROOT_OPTS, log=global_log):
      keys = set(keys)
      if user:
-Index: cloud-init/cloudinit/util.py
+Index: cloud-init-fedora/cloudinit/util.py
 ===================================================================
---- cloud-init.orig/cloudinit/util.py
-+++ cloud-init/cloudinit/util.py
+--- cloud-init-fedora.orig/cloudinit/util.py
++++ cloud-init-fedora/cloudinit/util.py
 @@ -84,6 +84,7 @@ def get_cfg_option_str(yobj, key, defaul
  
  def get_cfg_option_list_or_str(yobj, key, default=None):
@@ -50,10 +50,10 @@ Index: cloud-init/cloudinit/util.py
      if isinstance(yobj[key],list): return yobj[key]
      return([yobj[key]])
  
-Index: cloud-init/tools/write-ssh-key-fingerprints
+Index: cloud-init-fedora/tools/write-ssh-key-fingerprints
 ===================================================================
---- cloud-init.orig/tools/write-ssh-key-fingerprints
-+++ cloud-init/tools/write-ssh-key-fingerprints
+--- cloud-init-fedora.orig/tools/write-ssh-key-fingerprints
++++ cloud-init-fedora/tools/write-ssh-key-fingerprints
 @@ -3,8 +3,7 @@
  echo
  echo "#############################################################"

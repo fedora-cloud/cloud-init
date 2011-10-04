@@ -1,7 +1,7 @@
-Index: cloud-init/cloudinit/CloudConfig/cc_puppet.py
+Index: cloud-init-fedora/cloudinit/CloudConfig/cc_puppet.py
 ===================================================================
---- cloud-init.orig/cloudinit/CloudConfig/cc_puppet.py
-+++ cloud-init/cloudinit/CloudConfig/cc_puppet.py
+--- cloud-init-fedora.orig/cloudinit/CloudConfig/cc_puppet.py
++++ cloud-init-fedora/cloudinit/CloudConfig/cc_puppet.py
 @@ -16,6 +16,7 @@
  #    You should have received a copy of the GNU General Public License
  #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
