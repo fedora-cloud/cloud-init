@@ -22,7 +22,7 @@ Index: cloud-init-fedora/cloudinit/CloudConfig/cc_ssh.py
 -    for f in glob.glob("/etc/ssh/ssh_host_*key*"):
 -        try: os.unlink(f)
 -        except: pass
-+    if cfg.get("delete_system_ssh_keys", True):
++    if cfg.get("ssh_deletekeys", True):
 +        for f in glob.glob("/etc/ssh/ssh_host_*key*"):
 +            try: os.unlink(f)
 +            except: pass

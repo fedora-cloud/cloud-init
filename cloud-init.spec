@@ -2,7 +2,7 @@
 
 Name:           cloud-init
 Version:        0.6.2
-Release:        0.6.bzr457%{?dist}
+Release:        0.7.bzr457%{?dist}
 Summary:        Cloud instance init scripts
 
 Group:          System Environment/Base
@@ -155,6 +155,9 @@ fi
 
 
 %changelog
+* Wed Oct  5 2011 Garrett Holmstrom <gholms@fedoraproject.org> - 0.6.2-0.7.bzr457
+- Disabled SSH key-deleting on startup
+
 * Wed Sep 28 2011 Garrett Holmstrom <gholms@fedoraproject.org> - 0.6.2-0.6.bzr457
 - Consolidated selinux file context patches
 - Fixed cloud-init.service dependencies
