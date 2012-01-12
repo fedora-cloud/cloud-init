@@ -2,7 +2,7 @@
 
 Name:           cloud-init
 Version:        0.6.2
-Release:        0.7.bzr457%{?dist}
+Release:        0.8.bzr457%{?dist}
 Summary:        Cloud instance init scripts
 
 Group:          System Environment/Base
@@ -155,6 +155,9 @@ fi
 
 
 %changelog
+* Thu Jan 12 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.6.2-0.8.bzr457
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
+
 * Wed Oct  5 2011 Garrett Holmstrom <gholms@fedoraproject.org> - 0.6.2-0.7.bzr457
 - Disabled SSH key-deleting on startup
 
