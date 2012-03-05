@@ -13,6 +13,9 @@ Source0:        %{name}-%{version}-bzr532.tar.gz
 Source1:        cloud-init-fedora.cfg
 Source2:        cloud-init-README.fedora
 Patch0:         cloud-init-0.6.3-fedora.patch
+# Make runparts() work on Fedora
+# https://bugs.launchpad.net/cloud-init/+bug/934404
+Patch1:         cloud-init-0.6.3-no-runparts.patch
 
 BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -46,6 +49,7 @@ ssh keys and to let the user run various scripts.
 %prep
 %setup -q -n %{name}-%{version}-bzr532
 %patch0 -p0
+%patch1 -p0
 
 cp -p %{SOURCE2} README.fedora
 
@@ -129,6 +133,7 @@ fi
 %changelog
 * Mon Mar  5 2012 Garrett Holmstrom <gholms@fedoraproject.org> - 0.6.3-0.1.bzr532
 - Rebased against upstream rev 532
+- Fixed runparts() incompatibility with Fedora
 
 * Thu Jan 12 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.6.2-0.8.bzr457
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
