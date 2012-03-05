@@ -1,38 +1,18 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           cloud-init
-Version:        0.6.2
-Release:        0.8.bzr457%{?dist}
+Version:        0.6.3
+Release:        0.1.bzr532%{?dist}
 Summary:        Cloud instance init scripts
 
 Group:          System Environment/Base
 License:        GPLv3
 URL:            http://launchpad.net/cloud-init
-# bzr export -r 457 cloud-init-0.6.2-bzr457.tar.gz lp:cloud-init
-Source0:        %{name}-%{version}-bzr457.tar.gz
+# bzr export -r 532 cloud-init-0.6.3-bzr532.tar.gz lp:cloud-init
+Source0:        %{name}-%{version}-bzr532.tar.gz
 Source1:        cloud-init-fedora.cfg
 Source2:        cloud-init-README.fedora
-Patch0:         cloud-init-0.6.2-fedora.patch
-
-# The current patch set is in flux as we stabilize cloud-init on Fedora.
-# It will be submitted upstream as soon as it becomes reasonable to do so.
-
-# Add systemd support (not yet upstream)
-Patch2:         cloud-init-0.6.2-systemd.patch
-# Restore created files' selinux contexts (not yet upstream)
-Patch3:         cloud-init-0.6.2-filecontext.patch
-# Make locale file location configurable (not yet upstream)
-Patch4:         cloud-init-0.6.2-localefile.patch
-# Write timezone data to /etc/sysconfig/clock (not yet upstream)
-Patch5:         cloud-init-0.6.2-tzsysconfig.patch
-# Make enabling the puppet service work on Fedora (not yet upstream)
-Patch7:         cloud-init-0.6.2-puppetenable.patch
-# Make the types of SSH keys to generate configurable (not yet upstream)
-Patch8:         cloud-init-0.6.2-sshkeytypes.patch
-# https://bugs.launchpad.net/cloud-init/+bug/857926
-Patch10:        cloud-init-0.6.2-runparts-emptydir.patch
-# Deal with differences between out sshd service and Ubuntu's (not yet upstream)
-Patch11:        cloud-init-0.6.2-sshsvc.patch
+Patch0:         cloud-init-0.6.3-fedora.patch
 
 BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -64,16 +44,8 @@ ssh keys and to let the user run various scripts.
 
 
 %prep
-%setup -q -n %{name}-%{version}-bzr457
-%patch0 -p1
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
-%patch5 -p1
-%patch7 -p1
-%patch8 -p1
-%patch10 -p1
-%patch11 -p1
+%setup -q -n %{name}-%{version}-bzr532
+%patch0 -p0
 
 cp -p %{SOURCE2} README.fedora
 
@@ -155,6 +127,9 @@ fi
 
 
 %changelog
+* Mon Mar  5 2012 Garrett Holmstrom <gholms@fedoraproject.org> - 0.6.3-0.1.bzr532
+- Rebased against upstream rev 532
+
 * Thu Jan 12 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.6.2-0.8.bzr457
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
 

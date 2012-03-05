@@ -1,0 +1,28 @@
+=== modified file 'cloudinit/CloudConfig/cc_keys_to_console.py'
+--- cloudinit/CloudConfig/cc_keys_to_console.py	2012-01-18 14:07:33 +0000
++++ cloudinit/CloudConfig/cc_keys_to_console.py	2012-03-05 21:53:13 +0000
+@@ -26,7 +26,7 @@
+ 
+ 
+ def handle(_name, cfg, _cloud, log, _args):
+-    cmd = ['/usr/lib/cloud-init/write-ssh-key-fingerprints']
++    cmd = ['/usr/libexec/cloud-init/write-ssh-key-fingerprints']
+     fp_blacklist = util.get_cfg_option_list_or_str(cfg,
+         "ssh_fp_console_blacklist", [])
+     key_blacklist = util.get_cfg_option_list_or_str(cfg,
+
+=== modified file 'setup.py'
+--- setup.py	2011-12-20 16:39:46 +0000
++++ setup.py	2012-03-05 22:00:19 +0000
+@@ -40,9 +40,8 @@
+       data_files=[('/etc/cloud', glob('config/*.cfg')),
+                   ('/etc/cloud/cloud.cfg.d', glob('config/cloud.cfg.d/*')),
+                   ('/etc/cloud/templates', glob('templates/*')),
+-                  ('/etc/init', glob('upstart/*.conf')),
+                   ('/usr/share/cloud-init', []),
+-                  ('/usr/lib/cloud-init', 
++                  ('/usr/libexec/cloud-init', 
+                     ['tools/uncloud-init', 'tools/write-ssh-key-fingerprints']),
+                   ('/usr/share/doc/cloud-init', filter(is_f,glob('doc/*'))),
+                   ('/usr/share/doc/cloud-init/examples', filter(is_f,glob('doc/examples/*'))),
+
