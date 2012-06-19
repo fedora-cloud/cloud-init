@@ -1,0 +1,48 @@
+make subprocess usage, python 2.6 compatible
+
+diff -Naru cloud-init-0.6.3-bzr532.orig/cloudinit/netinfo.py cloud-init-0.6.3-bzr532/cloudinit/netinfo.py
+--- cloud-init-0.6.3-bzr532.orig/cloudinit/netinfo.py	2012-03-05 19:05:34.000000000 +0000
++++ cloud-init-0.6.3-bzr532/cloudinit/netinfo.py	2012-05-22 16:15:01.546245169 +0100
+@@ -21,10 +21,18 @@
+ 
+ import subprocess
+ 
++def check_output(args):
++    proc = subprocess.Popen(args, stdout=subprocess.PIPE)
++    out, err = proc.communicate()
++    ret = proc.returncode
++    if ret:
++        raise subprocess.CalledProcessError(ret, ' '.join(args))
++    return out
++
+ 
+ def netdev_info(empty=""):
+     fields = ("hwaddr", "addr", "bcast", "mask")
+-    ifcfg_out = str(subprocess.check_output(["ifconfig", "-a"]))
++    ifcfg_out = str(check_output(["ifconfig", "-a"]))
+     devs = {}
+     for line in ifcfg_out.splitlines():
+         if len(line) == 0:
+@@ -70,7 +78,7 @@
+ 
+ 
+ def route_info():
+-    route_out = str(subprocess.check_output(["route", "-n"]))
++    route_out = str(check_output(["route", "-n"]))
+     routes = []
+     for line in route_out.splitlines()[1:]:
+         if not line:
+diff -Naru cloud-init-0.6.3-bzr532.orig/cloudinit/util.py cloud-init-0.6.3-bzr532/cloudinit/util.py
+--- cloud-init-0.6.3-bzr532.orig/cloudinit/util.py	2012-06-18 12:38:58.695948654 +0100
++++ cloud-init-0.6.3-bzr532/cloudinit/util.py	2012-06-18 12:48:34.653968515 +0100
+@@ -227,7 +227,9 @@
+         stderr=subprocess.PIPE, stdin=subprocess.PIPE)
+     out, err = sp.communicate(input_)
+     if sp.returncode is not 0:
+-        raise subprocess.CalledProcessError(sp.returncode, args, (out, err))
++        _exc = subprocess.CalledProcessError(sp.returncode, args)
++        _exc.output = (out, err)
++        raise _exc
+     return(out, err)
+ 
+ 

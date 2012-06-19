@@ -2,7 +2,7 @@
 
 Name:           cloud-init
 Version:        0.6.3
-Release:        0.2.bzr532%{?dist}
+Release:        0.6.bzr532%{?dist}
 Summary:        Cloud instance init scripts
 
 Group:          System Environment/Base
@@ -12,19 +12,25 @@ URL:            http://launchpad.net/cloud-init
 Source0:        %{name}-%{version}-bzr532.tar.gz
 Source1:        cloud-init-fedora.cfg
 Source2:        cloud-init-README.fedora
+Source3:        cloud-config.init
+Source4:        cloud-final.init
+Source5:        cloud-init.init
+Source6:        cloud-init-local.init
+
 Patch0:         cloud-init-0.6.3-fedora.patch
 # Make runparts() work on Fedora
 # https://bugs.launchpad.net/cloud-init/+bug/934404
 Patch1:         cloud-init-0.6.3-no-runparts.patch
 # https://bugs.launchpad.net/cloud-init/+bug/970071
 Patch2:         cloud-init-0.6.3-lp970071.patch
+# Support subprocess on python < 2.7
+Patch3:         cloud-init-subprocess-2.6.patch
 
 BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  python-devel
 BuildRequires:  python-setuptools-devel
-BuildRequires:  systemd-units
 Requires:       e2fsprogs
 Requires:       iproute
 Requires:       libselinux-python
@@ -36,11 +42,10 @@ Requires:       python-configobj
 Requires:       PyYAML
 Requires:       rsyslog
 Requires:       shadow-utils
-Requires:       xfsprogs
 Requires:       /usr/bin/run-parts
-Requires(post):   systemd-units
-Requires(preun):  systemd-units
-Requires(postun): systemd-units
+Requires(post):   chkconfig
+Requires(preun):  chkconfig
+Requires(postun): initscripts
 
 %description
 Cloud-init is a set of init scripts for cloud instances.  Cloud instances
@@ -53,6 +58,7 @@ ssh keys and to let the user run various scripts.
 %patch0 -p0
 %patch1 -p0
 %patch2 -p1
+%patch3 -p1
 
 cp -p %{SOURCE2} README.fedora
 
@@ -77,9 +83,11 @@ cp -p %{SOURCE1} $RPM_BUILD_ROOT/%{_sysconfdir}/cloud/cloud.cfg
 mkdir -p $RPM_BUILD_ROOT/%{_sysconfdir}/rsyslog.d
 cp -p tools/21-cloudinit.conf $RPM_BUILD_ROOT/%{_sysconfdir}/rsyslog.d/21-cloudinit.conf
 
-# Install the systemd bits
-mkdir -p        $RPM_BUILD_ROOT/%{_unitdir}
-cp -p systemd/* $RPM_BUILD_ROOT/%{_unitdir}
+# Install the init scripts
+install -p -D -m 755 %{SOURCE3} %{buildroot}%{_initrddir}/cloud-config
+install -p -D -m 755 %{SOURCE4} %{buildroot}%{_initrddir}/cloud-final
+install -p -D -m 755 %{SOURCE5} %{buildroot}%{_initrddir}/cloud-init
+install -p -D -m 755 %{SOURCE6} %{buildroot}%{_initrddir}/cloud-init-local
 
 
 %clean
@@ -90,24 +98,23 @@ rm -rf $RPM_BUILD_ROOT
 if [ $1 -eq 1 ] ; then
     # Initial installation
     # Enabled by default per "runs once then goes away" exception
-    /bin/systemctl enable cloud-config.service     >/dev/null 2>&1 || :
-    /bin/systemctl enable cloud-final.service      >/dev/null 2>&1 || :
-    /bin/systemctl enable cloud-init.service       >/dev/null 2>&1 || :
-    /bin/systemctl enable cloud-init-local.service >/dev/null 2>&1 || :
+    for svc in config final init init-local; do
+        chkconfig --add cloud-$svc
+        chkconfig cloud-$svc on
+    done
 fi
 
 %preun
 if [ $1 -eq 0 ] ; then
     # Package removal, not upgrade
-    /bin/systemctl --no-reload disable cloud-config.service >/dev/null 2>&1 || :
-    /bin/systemctl --no-reload disable cloud-final.service  >/dev/null 2>&1 || :
-    /bin/systemctl --no-reload disable cloud-init.service   >/dev/null 2>&1 || :
-    /bin/systemctl --no-reload disable cloud-init-local.service >/dev/null 2>&1 || :
+    for svc in config final init init-local; do
+        chkconfig cloud-$svc off
+        chkconfig --del cloud-$svc
+    done
     # One-shot services -> no need to stop
 fi
 
 %postun
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 # One-shot services -> no need to restart
 
 
@@ -119,11 +126,7 @@ fi
 %doc               %{_sysconfdir}/cloud/cloud.cfg.d/README
 %dir               %{_sysconfdir}/cloud/templates
 %config(noreplace) %{_sysconfdir}/cloud/templates/*
-%{_unitdir}/cloud-config.service
-%{_unitdir}/cloud-config.target
-%{_unitdir}/cloud-final.service
-%{_unitdir}/cloud-init-local.service
-%{_unitdir}/cloud-init.service
+%{_initrddir}/cloud-*
 %{python_sitelib}/*
 %{_libexecdir}/%{name}
 %{_bindir}/cloud-init*
@@ -134,6 +137,15 @@ fi
 
 
 %changelog
+* Mon Jun 18 2012 Pádraig Brady <P@draigBrady.com> - 0.6.3-0.6.bzr532
+- Further adjustments to support EPEL 6
+
+* Fri Jun 15 2012 Tomas Karasek <tomas.karasek@cern.ch> - 0.6.3-0.5.bzr532
+- Fix cloud-init-cfg invocation in init script
+
+* Tue May 22 2012 Pádraig Brady <P@draigBrady.com> - 0.6.3-0.4.bzr532
+- Support EPEL 6
+
 * Sat Mar 31 2012 Andy Grimm <agrimm@gmail.com> - 0.6.3-0.2.bzr532
 - Fixed incorrect interpretation of relative path for
   AuthorizedKeysFile (BZ #735521)
