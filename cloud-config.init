@@ -1,0 +1,90 @@
+#!/bin/sh
+#
+# cloud-config
+#
+# chkconfig:   - 20 80
+# description: Apply the settings specified in cloud-config
+
+### BEGIN INIT INFO
+# Provides: cloud-config
+# Required-Start: $remote_fs $network $syslog cloud-init-local cloud-init
+# Required-Stop: $remote_fs $syslog
+# Default-Stop: 0 1 6
+# Short-Description: Apply the settings specified in cloud-config
+# Description: Apply the settings specified in cloud-config
+### END INIT INFO
+
+. /etc/rc.d/init.d/functions
+
+prog=cloud-init-cfg
+exec="/usr/bin/$prog"
+
+[ -e /etc/sysconfig/$prog ] && . /etc/sysconfig/$prog
+
+
+start() {
+    [ -x $exec ] || exit 5
+    echo -n $"Starting $prog: "
+    $prog all config
+    retval=$?
+    echo
+    return $retval
+}
+
+stop() {
+    return
+}
+
+restart() {
+    stop
+    start
+}
+
+reload() {
+    restart
+}
+
+force_reload() {
+    restart
+}
+
+rh_status() {
+    status $prog
+}
+
+rh_status_q() {
+    rh_status >/dev/null 2>&1
+}
+
+
+case "$1" in
+    start)
+        rh_status_q && exit 0
+        $1
+        ;;
+    stop)
+        rh_status_q || exit 0
+        $1
+        ;;
+    restart)
+        $1
+        ;;
+    reload)
+        rh_status_q || exit 7
+        $1
+        ;;
+    force-reload)
+        force_reload
+        ;;
+    status)
+        rh_status
+        ;;
+    condrestart|try-restart)
+        rh_status_q || exit 0
+        restart
+        ;;
+    *)
+        echo $"Usage: $0 {start|stop|status|restart|condrestart|try-restart|reload|force-reload}"
+        exit 2
+esac
+exit $?
