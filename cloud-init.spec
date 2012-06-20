@@ -84,10 +84,10 @@ mkdir -p $RPM_BUILD_ROOT/%{_sysconfdir}/rsyslog.d
 cp -p tools/21-cloudinit.conf $RPM_BUILD_ROOT/%{_sysconfdir}/rsyslog.d/21-cloudinit.conf
 
 # Install the init scripts
-install -p -D -m 755 %{SOURCE3} %{buildroot}%{_initrddir}/cloud-config
-install -p -D -m 755 %{SOURCE4} %{buildroot}%{_initrddir}/cloud-final
-install -p -D -m 755 %{SOURCE5} %{buildroot}%{_initrddir}/cloud-init
-install -p -D -m 755 %{SOURCE6} %{buildroot}%{_initrddir}/cloud-init-local
+install -p -D -m 755 %{SOURCE3} $RPM_BUILD_ROOT/%{_initrddir}/cloud-config
+install -p -D -m 755 %{SOURCE4} $RPM_BUILD_ROOT/%{_initrddir}/cloud-final
+install -p -D -m 755 %{SOURCE5} $RPM_BUILD_ROOT/%{_initrddir}/cloud-init
+install -p -D -m 755 %{SOURCE6} $RPM_BUILD_ROOT/%{_initrddir}/cloud-init-local
 
 
 %clean
