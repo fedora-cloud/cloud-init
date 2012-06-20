@@ -2,7 +2,7 @@
 #
 # cloud-final
 #
-# chkconfig:   - 20 80
+# chkconfig:   - 99 01
 # description: Execute cloud user/final scripts
 
 ### BEGIN INIT INFO
