@@ -2,7 +2,7 @@
 
 Name:           cloud-init
 Version:        0.6.3
-Release:        0.2.bzr532%{?dist}
+Release:        0.3.bzr532%{?dist}
 Summary:        Cloud instance init scripts
 
 Group:          System Environment/Base
@@ -18,6 +18,7 @@ Patch0:         cloud-init-0.6.3-fedora.patch
 Patch1:         cloud-init-0.6.3-no-runparts.patch
 # https://bugs.launchpad.net/cloud-init/+bug/970071
 Patch2:         cloud-init-0.6.3-lp970071.patch
+Patch3:         cloud-init-0.6.3-yum.patch
 
 BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -53,6 +54,7 @@ ssh keys and to let the user run various scripts.
 %patch0 -p0
 %patch1 -p0
 %patch2 -p1
+%patch3 -p1
 
 cp -p %{SOURCE2} README.fedora
 
@@ -134,6 +136,9 @@ fi
 
 
 %changelog
+* Wed Jun 27 2012 Pádraig Brady <P@draigBrady.com> - 0.6.3-0.3.bzr532
+- Add support for installing yum packages
+
 * Sat Mar 31 2012 Andy Grimm <agrimm@gmail.com> - 0.6.3-0.2.bzr532
 - Fixed incorrect interpretation of relative path for
   AuthorizedKeysFile (BZ #735521)
