@@ -12,10 +12,6 @@ URL:            http://launchpad.net/cloud-init
 Source0:        %{name}-%{version}-bzr532.tar.gz
 Source1:        cloud-init-fedora.cfg
 Source2:        cloud-init-README.fedora
-Source3:        cloud-config.init
-Source4:        cloud-final.init
-Source5:        cloud-init.init
-Source6:        cloud-init-local.init
 
 Patch0:         cloud-init-0.6.3-fedora.patch
 # Make runparts() work on Fedora
@@ -23,8 +19,10 @@ Patch0:         cloud-init-0.6.3-fedora.patch
 Patch1:         cloud-init-0.6.3-no-runparts.patch
 # https://bugs.launchpad.net/cloud-init/+bug/970071
 Patch2:         cloud-init-0.6.3-lp970071.patch
+# Add sysv init scripts
+Patch3:         cloud-init-0.6.3-sysv.patch
 # Support subprocess on python < 2.7
-Patch3:         cloud-init-subprocess-2.6.patch
+Patch4:         cloud-init-0.6.3-subprocess-2.6.patch
 
 BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -59,6 +57,7 @@ ssh keys and to let the user run various scripts.
 %patch1 -p0
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 cp -p %{SOURCE2} README.fedora
 
@@ -84,10 +83,8 @@ mkdir -p $RPM_BUILD_ROOT/%{_sysconfdir}/rsyslog.d
 cp -p tools/21-cloudinit.conf $RPM_BUILD_ROOT/%{_sysconfdir}/rsyslog.d/21-cloudinit.conf
 
 # Install the init scripts
-install -p -D -m 755 %{SOURCE3} $RPM_BUILD_ROOT/%{_initrddir}/cloud-config
-install -p -D -m 755 %{SOURCE4} $RPM_BUILD_ROOT/%{_initrddir}/cloud-final
-install -p -D -m 755 %{SOURCE5} $RPM_BUILD_ROOT/%{_initrddir}/cloud-init
-install -p -D -m 755 %{SOURCE6} $RPM_BUILD_ROOT/%{_initrddir}/cloud-init-local
+mkdir -p $RPM_BUILD_ROOT/%{_initrddir}
+install -p -m 755 sysv/* $RPM_BUILD_ROOT/%{_initrddir}/
 
 
 %clean
