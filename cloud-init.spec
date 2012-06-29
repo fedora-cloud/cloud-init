@@ -2,7 +2,7 @@
 
 Name:           cloud-init
 Version:        0.6.3
-Release:        0.6.bzr532%{?dist}
+Release:        0.7.bzr532%{?dist}
 Summary:        Cloud instance init scripts
 
 Group:          System Environment/Base
@@ -23,6 +23,7 @@ Patch2:         cloud-init-0.6.3-lp970071.patch
 Patch3:         cloud-init-0.6.3-sysv.patch
 # Support subprocess on python < 2.7
 Patch4:         cloud-init-0.6.3-subprocess-2.6.patch
+Patch5:         cloud-init-0.6.3-yum.patch
 
 BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -58,6 +59,7 @@ ssh keys and to let the user run various scripts.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 
 cp -p %{SOURCE2} README.fedora
 
@@ -134,6 +136,9 @@ fi
 
 
 %changelog
+* Wed Jun 27 2012 Pádraig Brady <P@draigBrady.com> - 0.6.3-0.7.bzr532
+- Add support for installing yum packages
+
 * Mon Jun 18 2012 Pádraig Brady <P@draigBrady.com> - 0.6.3-0.6.bzr532
 - Further adjustments to support EPEL 6
 
