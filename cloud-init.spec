@@ -2,7 +2,7 @@
 
 Name:           cloud-init
 Version:        0.6.3
-Release:        0.3.bzr532%{?dist}
+Release:        0.4.bzr532%{?dist}
 Summary:        Cloud instance init scripts
 
 Group:          System Environment/Base
@@ -136,6 +136,9 @@ fi
 
 
 %changelog
+* Wed Jul 18 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.6.3-0.4.bzr532
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
+
 * Wed Jun 27 2012 Pádraig Brady <P@draigBrady.com> - 0.6.3-0.3.bzr532
 - Add support for installing yum packages
 
