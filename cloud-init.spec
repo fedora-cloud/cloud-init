@@ -5,7 +5,7 @@
 
 Name:           cloud-init
 Version:        0.6.3
-Release:        0.8.bzr532%{?dist}
+Release:        0.9.bzr532%{?dist}
 Summary:        Cloud instance init scripts
 
 Group:          System Environment/Base
@@ -49,12 +49,13 @@ Requires:       procps
 Requires:       python-boto
 Requires:       python-cheetah
 Requires:       python-configobj
+Requires:       PyYAML
 %else
 Requires:       python26-boto
 Requires:       python26-cheetah
 Requires:       python26-configobj
+Requires:       python26-PyYAML
 %endif
-Requires:       PyYAML
 Requires:       rsyslog
 Requires:       shadow-utils
 Requires:       /usr/bin/run-parts
@@ -155,7 +156,7 @@ fi
 
 
 %changelog
-* Thu Jul 19 2012 Jan van Eldik <Jan.van.Eldik@cern.ch> - 0.6.3-0.8.bzr532
+* Thu Jul 19 2012 Jan van Eldik <Jan.van.Eldik@cern.ch> - 0.6.3-0.9.bzr532
 - Support EPEL5 using python 2.6 and adjustment of chkconfig order
 
 * Wed Jun 27 2012 Pádraig Brady <P@draigBrady.com> - 0.6.3-0.7.bzr532
