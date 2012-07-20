@@ -1,8 +1,11 @@
+%if 0%{?rhel} <= 5
+%define __python /usr/bin/python2.6
+%endif
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           cloud-init
 Version:        0.6.3
-Release:        0.7.bzr532%{?dist}
+Release:        0.8.bzr532%{?dist}
 Summary:        Cloud instance init scripts
 
 Group:          System Environment/Base
@@ -25,19 +28,32 @@ Patch3:         cloud-init-0.6.3-sysv.patch
 Patch4:         cloud-init-0.6.3-subprocess-2.6.patch
 Patch5:         cloud-init-0.6.3-yum.patch
 
+Patch100:       cloud-init-0.6.3-use-python2.6.patch
+
 BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
+%if 0%{?rhel} >= 6
 BuildRequires:  python-devel
 BuildRequires:  python-setuptools-devel
+%else
+BuildRequires:  python26-devel
+BuildRequires:  python-setuptools
+%endif
 Requires:       e2fsprogs
 Requires:       iproute
 Requires:       libselinux-python
 Requires:       net-tools
 Requires:       procps
+%if 0%{?rhel} >= 6
 Requires:       python-boto
 Requires:       python-cheetah
 Requires:       python-configobj
+%else
+Requires:       python26-boto
+Requires:       python26-cheetah
+Requires:       python26-configobj
+%endif
 Requires:       PyYAML
 Requires:       rsyslog
 Requires:       shadow-utils
@@ -60,6 +76,9 @@ ssh keys and to let the user run various scripts.
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
+%if 0%{?rhel} <= 5
+%patch100 -p0
+%endif
 
 cp -p %{SOURCE2} README.fedora
 
@@ -97,7 +116,7 @@ rm -rf $RPM_BUILD_ROOT
 if [ $1 -eq 1 ] ; then
     # Initial installation
     # Enabled by default per "runs once then goes away" exception
-    for svc in config final init init-local; do
+    for svc in init-local init config final; do
         chkconfig --add cloud-$svc
         chkconfig cloud-$svc on
     done
@@ -106,7 +125,7 @@ fi
 %preun
 if [ $1 -eq 0 ] ; then
     # Package removal, not upgrade
-    for svc in config final init init-local; do
+    for svc in init-local init config final; do
         chkconfig cloud-$svc off
         chkconfig --del cloud-$svc
     done
@@ -136,6 +155,9 @@ fi
 
 
 %changelog
+* Thu Jul 19 2012 Jan van Eldik <Jan.van.Eldik@cern.ch> - 0.6.3-0.8.bzr532
+- Support EPEL5 using python 2.6 and adjustment of chkconfig order
+
 * Wed Jun 27 2012 Pádraig Brady <P@draigBrady.com> - 0.6.3-0.7.bzr532
 - Add support for installing yum packages
 
