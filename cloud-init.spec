@@ -5,7 +5,7 @@
 
 Name:           cloud-init
 Version:        0.6.3
-Release:        0.9.bzr532%{?dist}
+Release:        0.10.bzr532%{?dist}
 Summary:        Cloud instance init scripts
 
 Group:          System Environment/Base
@@ -29,6 +29,7 @@ Patch4:         cloud-init-0.6.3-subprocess-2.6.patch
 Patch5:         cloud-init-0.6.3-yum.patch
 
 Patch100:       cloud-init-0.6.3-use-python2.6.patch
+Patch101:       cloud-init-0.6.3-ext4.patch
 
 BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -36,11 +37,12 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 %if 0%{?rhel} >= 6
 BuildRequires:  python-devel
 BuildRequires:  python-setuptools-devel
+Requires:       e2fsprogs
 %else
 BuildRequires:  python26-devel
 BuildRequires:  python-setuptools
+Requires:       e4fsprogs
 %endif
-Requires:       e2fsprogs
 Requires:       iproute
 Requires:       libselinux-python
 Requires:       net-tools
@@ -79,6 +81,7 @@ ssh keys and to let the user run various scripts.
 %patch5 -p1
 %if 0%{?rhel} <= 5
 %patch100 -p0
+%patch101 -p1
 %endif
 
 cp -p %{SOURCE2} README.fedora
@@ -156,6 +159,9 @@ fi
 
 
 %changelog
+* Tue Sep 11 2012 Pádraig Brady <P@draigBrady.com> - 0.6.3-0.10.bzr532
+- Add support for ext4 on EPEL5
+
 * Thu Jul 19 2012 Jan van Eldik <Jan.van.Eldik@cern.ch> - 0.6.3-0.9.bzr532
 - Support EPEL5 using python 2.6 and adjustment of chkconfig order
 
