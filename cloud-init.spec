@@ -20,6 +20,10 @@ Patch1:         cloud-init-0.6.3-no-runparts.patch
 Patch2:         cloud-init-0.6.3-lp970071.patch
 # Add support for installing packages with yum
 Patch3:         cloud-init-0.6.3-yum.patch
+# https://bugzilla.redhat.com/show_bug.cgi?id=850916
+# https://bugs.launchpad.net/cloud-init/+bug/1040200
+# http://bazaar.launchpad.net/~cloud-init-dev/cloud-init/trunk/revision/635
+Patch4:         cloud-init-0.6.3-fqdn.patch
 
 BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -56,6 +60,7 @@ ssh keys and to let the user run various scripts.
 %patch1 -p0
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 cp -p %{SOURCE2} README.fedora
 
@@ -137,6 +142,9 @@ fi
 
 
 %changelog
+* Thu Sep 13 2012 Garrett Holmstrom <gholms@fedoraproject.org> - 0.6.3-0.4.bzr532
+- Use a FQDN (instance-data.) for instance data URL fallback [RH:850916 LP:1040200]
+
 * Wed Jul 18 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.6.3-0.4.bzr532
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
 
