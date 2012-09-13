@@ -28,6 +28,10 @@ Patch3:         cloud-init-0.6.3-sysv.patch
 Patch4:         cloud-init-0.6.3-subprocess-2.6.patch
 # Add support for installing packages with yum
 Patch5:         cloud-init-0.6.3-yum.patch
+# https://bugzilla.redhat.com/show_bug.cgi?id=850916
+# https://bugs.launchpad.net/cloud-init/+bug/1040200
+# http://bazaar.launchpad.net/~cloud-init-dev/cloud-init/trunk/revision/635
+Patch6:         cloud-init-0.6.3-fqdn.patch
 
 Patch100:       cloud-init-0.6.3-use-python2.6.patch
 Patch101:       cloud-init-0.6.3-ext4.patch
@@ -80,6 +84,7 @@ ssh keys and to let the user run various scripts.
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
+%patch6 -p1
 %if 0%{?rhel} <= 5
 %patch100 -p0
 %patch101 -p1
@@ -160,6 +165,9 @@ fi
 
 
 %changelog
+* Thu Sep 13 2012 Garrett Holmstrom <gholms@fedoraproject.org> - 0.6.3-0.4.bzr532
+- Use a FQDN (instance-data.) for instance data URL fallback [RH:850916 LP:1040200]
+
 * Tue Sep 11 2012 Pádraig Brady <P@draigBrady.com> - 0.6.3-0.10.bzr532
 - Add support for ext4 on EPEL5
 
