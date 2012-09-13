@@ -26,6 +26,7 @@ Patch2:         cloud-init-0.6.3-lp970071.patch
 Patch3:         cloud-init-0.6.3-sysv.patch
 # Support subprocess on python < 2.7
 Patch4:         cloud-init-0.6.3-subprocess-2.6.patch
+# Add support for installing packages with yum
 Patch5:         cloud-init-0.6.3-yum.patch
 
 Patch100:       cloud-init-0.6.3-use-python2.6.patch
