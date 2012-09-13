@@ -18,6 +18,7 @@ Patch0:         cloud-init-0.6.3-fedora.patch
 Patch1:         cloud-init-0.6.3-no-runparts.patch
 # https://bugs.launchpad.net/cloud-init/+bug/970071
 Patch2:         cloud-init-0.6.3-lp970071.patch
+# Add support for installing packages with yum
 Patch3:         cloud-init-0.6.3-yum.patch
 
 BuildArch:      noarch
