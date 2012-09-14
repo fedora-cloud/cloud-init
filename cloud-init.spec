@@ -27,6 +27,9 @@ Patch4:         cloud-init-0.6.3-fqdn.patch
 # Kill off timeouts for when users' cloud-config jobs take > 90s to finish
 # https://bugzilla.redhat.com/show_bug.cgi?id=836269
 Patch5:         cloud-init-0.6.3-systemd-timeout.patch
+# Send output to console so euca-get-console-output works
+# https://bugzilla.redhat.com/show_bug.cgi?id=854654
+Patch6:         cloud-init-0.6.3-systemd-stdout.patch
 
 BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -65,6 +68,7 @@ ssh keys and to let the user run various scripts.
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
+%patch6 -p1
 
 cp -p %{SOURCE2} README.fedora
 
@@ -149,6 +153,7 @@ fi
 * Thu Sep 13 2012 Garrett Holmstrom <gholms@fedoraproject.org> - 0.6.3-0.4.bzr532
 - Use a FQDN (instance-data.) for instance data URL fallback [RH:850916 LP:1040200]
 - Shut off systemd timeouts [RH:836269]
+- Send output to the console [RH:854654]
 
 * Wed Jul 18 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.6.3-0.4.bzr532
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
