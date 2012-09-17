@@ -1,35 +1,24 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           cloud-init
-Version:        0.6.3
-Release:        0.5.bzr532%{?dist}
+Version:        0.7.0
+Release:        0.1.bzr650%{?dist}
 Summary:        Cloud instance init scripts
 
 Group:          System Environment/Base
 License:        GPLv3
 URL:            http://launchpad.net/cloud-init
-# bzr export -r 532 cloud-init-0.6.3-bzr532.tar.gz lp:cloud-init
-Source0:        %{name}-%{version}-bzr532.tar.gz
+# bzr export -r 650 cloud-init-0.7.0-bzr650.tar.gz lp:cloud-init
+Source0:        %{name}-%{version}-bzr650.tar.gz
 Source1:        cloud-init-fedora.cfg
 Source2:        cloud-init-README.fedora
-Patch0:         cloud-init-0.6.3-fedora.patch
-# Make runparts() work on Fedora
-# https://bugs.launchpad.net/cloud-init/+bug/934404
-Patch1:         cloud-init-0.6.3-no-runparts.patch
-# https://bugs.launchpad.net/cloud-init/+bug/970071
-Patch2:         cloud-init-0.6.3-lp970071.patch
-# Add support for installing packages with yum
-Patch3:         cloud-init-0.6.3-yum.patch
-# https://bugzilla.redhat.com/show_bug.cgi?id=850916
-# https://bugs.launchpad.net/cloud-init/+bug/1040200
-# http://bazaar.launchpad.net/~cloud-init-dev/cloud-init/trunk/revision/635
-Patch4:         cloud-init-0.6.3-fqdn.patch
-# Kill off timeouts for when users' cloud-config jobs take > 90s to finish
-# https://bugzilla.redhat.com/show_bug.cgi?id=836269
-Patch5:         cloud-init-0.6.3-systemd-timeout.patch
-# Send output to console so euca-get-console-output works
-# https://bugzilla.redhat.com/show_bug.cgi?id=854654
-Patch6:         cloud-init-0.6.3-systemd-stdout.patch
+Patch0:         cloud-init-0.7.0-fedora.patch
+# Make update_package_sources stop upgrading packages
+# https://code.launchpad.net/~gholms/cloud-init/yum-clean/+merge/125001
+Patch1:         cloud-init-0.7.0-yum-clean.patch
+# Add support for useradd --selinux-user
+# https://code.launchpad.net/~gholms/cloud-init/useradd-selinux/+merge/124998
+Patch2:         cloud-init-0.7.0-useradd-selinux.patch
 
 BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -41,10 +30,12 @@ Requires:       e2fsprogs
 Requires:       iproute
 Requires:       libselinux-python
 Requires:       net-tools
+Requires:       policycoreutils-python
 Requires:       procps
 Requires:       python-boto
 Requires:       python-cheetah
 Requires:       python-configobj
+Requires:       python-prettytable
 Requires:       PyYAML
 Requires:       rsyslog
 Requires:       shadow-utils
@@ -61,14 +52,10 @@ ssh keys and to let the user run various scripts.
 
 
 %prep
-%setup -q -n %{name}-%{version}-bzr532
-%patch0 -p0
-%patch1 -p0
+%setup -q -n %{name}-%{version}-bzr650
+%patch0 -p1
+%patch1 -p1
 %patch2 -p1
-%patch3 -p1
-%patch4 -p1
-%patch5 -p1
-%patch6 -p1
 
 cp -p %{SOURCE2} README.fedora
 
@@ -81,15 +68,11 @@ cp -p %{SOURCE2} README.fedora
 rm -rf $RPM_BUILD_ROOT
 %{__python} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
 
-for x in $RPM_BUILD_ROOT/%{_bindir}/*.py; do mv "$x" "${x%.py}"; done
-chmod +x $RPM_BUILD_ROOT/%{python_sitelib}/cloudinit/SshUtil.py
 mkdir -p $RPM_BUILD_ROOT/%{_sharedstatedir}/cloud
 
 # We supply our own config file since our software differs from Ubuntu's.
 cp -p %{SOURCE1} $RPM_BUILD_ROOT/%{_sysconfdir}/cloud/cloud.cfg
 
-# Note that /etc/rsyslog.d didn't exist by default until F15.
-# el6 request: https://bugzilla.redhat.com/show_bug.cgi?id=740420
 mkdir -p $RPM_BUILD_ROOT/%{_sysconfdir}/rsyslog.d
 cp -p tools/21-cloudinit.conf $RPM_BUILD_ROOT/%{_sysconfdir}/rsyslog.d/21-cloudinit.conf
 
@@ -150,6 +133,10 @@ fi
 
 
 %changelog
+* Mon Sep 17 2012 Garrett Holmstrom <gholms@fedoraproject.org> - 0.7.0-0.1.bzr650
+- Rebased against upstream rev 650
+- Added support for useradd --selinux-user
+
 * Thu Sep 13 2012 Garrett Holmstrom <gholms@fedoraproject.org> - 0.6.3-0.5.bzr532
 - Use a FQDN (instance-data.) for instance data URL fallback [RH:850916 LP:1040200]
 - Shut off systemd timeouts [RH:836269]

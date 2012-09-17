@@ -1,0 +1,35 @@
+Index: cloud-init/cloudinit/config/cc_keys_to_console.py
+===================================================================
+--- cloud-init.orig/cloudinit/config/cc_keys_to_console.py
++++ cloud-init/cloudinit/config/cc_keys_to_console.py
+@@ -26,7 +26,7 @@ from cloudinit import util
+ frequency = PER_INSTANCE
+ 
+ # This is a tool that cloud init provides
+-HELPER_TOOL = '/usr/lib/cloud-init/write-ssh-key-fingerprints'
++HELPER_TOOL = '/usr/libexec/cloud-init/write-ssh-key-fingerprints'
+ 
+ 
+ def handle(name, cfg, _cloud, log, _args):
+Index: cloud-init/setup.py
+===================================================================
+--- cloud-init.orig/setup.py
++++ cloud-init/setup.py
+@@ -43,7 +43,7 @@ INITSYS_FILES = {
+ }
+ INITSYS_ROOTS = {
+     'sysvinit': '/etc/rc.d/init.d',
+-    'systemd': '/etc/systemd/system/',
++    'systemd': '/usr/lib/systemd/system/',
+     'upstart': '/etc/init/',
+ }
+ INITSYS_TYPES = sorted(list(INITSYS_ROOTS.keys()))
+@@ -120,7 +120,7 @@ setuptools.setup(name='cloud-init',
+                   ('/etc/cloud/cloud.cfg.d', glob('config/cloud.cfg.d/*')),
+                   ('/etc/cloud/templates', glob('templates/*')),
+                   ('/usr/share/cloud-init', []),
+-                  ('/usr/lib/cloud-init',
++                  ('/usr/libexec/cloud-init',
+                     ['tools/uncloud-init',
+                      'tools/write-ssh-key-fingerprints']),
+                   ('/usr/share/doc/cloud-init',
