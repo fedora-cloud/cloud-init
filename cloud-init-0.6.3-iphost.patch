@@ -1,0 +1,13 @@
+Index: cloud-init-0.6.3-bzr532/cloudinit/DataSource.py
+===================================================================
+--- cloud-init-0.6.3-bzr532.orig/cloudinit/DataSource.py
++++ cloud-init-0.6.3-bzr532/cloudinit/DataSource.py
+@@ -136,7 +136,7 @@ class DataSource:
+             # make up a hostname (LP: #475354) in format ip-xx.xx.xx.xx
+             lhost = self.metadata['local-hostname']
+             if is_ipv4(lhost):
+-                toks = "ip-%s" % lhost.replace(".", "-")
++                toks = ["ip-%s" % lhost.replace(".", "-")]
+             else:
+                 toks = lhost.split(".")
+ 

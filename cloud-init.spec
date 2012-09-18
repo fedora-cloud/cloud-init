@@ -2,7 +2,7 @@
 
 Name:           cloud-init
 Version:        0.6.3
-Release:        0.5.bzr532%{?dist}
+Release:        0.6.bzr532%{?dist}
 Summary:        Cloud instance init scripts
 
 Group:          System Environment/Base
@@ -30,6 +30,11 @@ Patch5:         cloud-init-0.6.3-systemd-timeout.patch
 # Send output to console so euca-get-console-output works
 # https://bugzilla.redhat.com/show_bug.cgi?id=854654
 Patch6:         cloud-init-0.6.3-systemd-stdout.patch
+# Fix IP-based hostname generation
+# https://bugzilla.redhat.com/show_bug.cgi?id=857502
+# https://bugs.launchpad.net/cloud-init/+bug/1050962
+# http://bazaar.launchpad.net/~cloud-init-dev/cloud-init/trunk/revision/648
+Patch7:         cloud-init-0.6.3-iphost.patch
 
 BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -69,6 +74,7 @@ ssh keys and to let the user run various scripts.
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
+%patch7 -p1
 
 cp -p %{SOURCE2} README.fedora
 
@@ -150,6 +156,9 @@ fi
 
 
 %changelog
+* Tue Sep 18 2012 Garrett Holmstrom <gholms@fedoraproject.org> - 0.6.3-0.6.bzr532
+- Fixed IP-based hostname generation [RH:857502 LP:1050962]
+
 * Thu Sep 13 2012 Garrett Holmstrom <gholms@fedoraproject.org> - 0.6.3-0.5.bzr532
 - Use a FQDN (instance-data.) for instance data URL fallback [RH:850916 LP:1040200]
 - Shut off systemd timeouts [RH:836269]
