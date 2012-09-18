@@ -5,7 +5,7 @@
 
 Name:           cloud-init
 Version:        0.6.3
-Release:        0.10.bzr532%{?dist}
+Release:        0.11.bzr532%{?dist}
 Summary:        Cloud instance init scripts
 
 Group:          System Environment/Base
@@ -165,7 +165,7 @@ fi
 
 
 %changelog
-* Thu Sep 13 2012 Garrett Holmstrom <gholms@fedoraproject.org> - 0.6.3-0.4.bzr532
+* Thu Sep 13 2012 Garrett Holmstrom <gholms@fedoraproject.org> - 0.6.3-0.11.bzr532
 - Use a FQDN (instance-data.) for instance data URL fallback [RH:850916 LP:1040200]
 
 * Tue Sep 11 2012 Pádraig Brady <P@draigBrady.com> - 0.6.3-0.10.bzr532
