@@ -1,0 +1,79 @@
+Index: trunk/cloudinit/config/cc_ssh_authkey_fingerprints.py
+===================================================================
+--- trunk.orig/cloudinit/config/cc_ssh_authkey_fingerprints.py
++++ trunk/cloudinit/config/cc_ssh_authkey_fingerprints.py
+@@ -21,7 +21,8 @@ import hashlib
+ 
+ from prettytable import PrettyTable
+ 
+-from cloudinit import ssh_util
++from cloudinit.ssh_util import extract_authorized_keys as eak
++
+ from cloudinit import util
+ 
+ 
+@@ -40,8 +41,9 @@ def _gen_fingerprint(b64_text, hash_meth
+         hasher = hashlib.new(hash_meth)
+         hasher.update(base64.b64decode(b64_text))
+         return ":".join(_split_hash(hasher.hexdigest()))
+-    except TypeError:
+-        # Raised when b64 not really b64...
++    except (TypeError, ValueError):
++        # Raised when b64 not really b64... or
++        # when the hash type isn't valid
+         return '?'
+ 
+ 
+@@ -84,13 +86,48 @@ def _pprint_key_entries(user, key_fn, ke
+                        stderr=False, console=True)
+ 
+ 
++def translate_user_name(uname, distro, log):
++    if not uname:
++        uname = ''
++    uname = uname.strip()
++    real_name = None
++    if uname.lower() == 'default':
++        try:
++            real_name = distro.get_default_user()
++        except NotImplementedError:
++            log.warn("Distro has not implemented default user "
++                     "creation. No default user will be translated.")
++    else:
++        real_name = uname
++    return real_name
++
++
+ def handle(name, cfg, cloud, log, _args):
+     if 'no_ssh_fingerprints' in cfg:
+         log.debug(("Skipping module named %s, "
+                    "logging of ssh fingerprints disabled"), name)
++        return
++
++    if not 'users' in cfg:
++        log.debug(("Skipping module named %s, "
++                   "logging of ssh fingerprints disabled "
++                   "since no user/s provided"), name)
++        return
++
++    users_to_hash = []
++    for user_config in cfg['users']:
++        user_name = None
++        if isinstance(user_config, (basestring, str)):
++            user_name = translate_user_name(user_config, cloud.distro, log)
++        elif isinstance(user_config, (dict)):
++            if 'name' in user_config:
++                user_name = translate_user_name(user_config['name'],
++                                                cloud.distro, log)
++        if user_name:
++            users_to_hash.append(user_name)
+ 
+-    user_name = util.get_cfg_option_str(cfg, "user", "ubuntu")
+     hash_meth = util.get_cfg_option_str(cfg, "authkey_hash", "md5")
+-    extract = ssh_util.extract_authorized_keys
+-    (auth_key_fn, auth_key_entries) = extract(user_name, cloud.paths)
+-    _pprint_key_entries(user_name, auth_key_fn, auth_key_entries, hash_meth)
++    for user_name in users_to_hash:
++        (auth_key_fn, auth_key_entries) = eak(user_name, cloud.paths)
++        _pprint_key_entries(user_name, auth_key_fn,
++                            auth_key_entries, hash_meth)

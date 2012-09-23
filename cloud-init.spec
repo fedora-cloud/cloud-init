@@ -16,6 +16,9 @@ Patch0:         cloud-init-0.7.0-fedora.patch
 # Make Fedora use the same hostname-updating code as Debian (/etc/hostname)
 # https://code.launchpad.net/~gholms/cloud-init/hostname-refactor/+merge/125869
 Patch1:         cloud-init-0.7.0-hostname-refactor.patch
+# Fix fingerprint printing caused by recent user code refactoring
+# https://code.launchpad.net/~harlowja/cloud-init/patch-ssh-key-users/+merge/125606
+Patch2:         cloud-init-0.7.0-ssh-key-users.patch
 
 BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -52,6 +55,7 @@ ssh keys and to let the user run various scripts.
 %setup -q -n %{name}-%{version}-bzr659
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 cp -p %{SOURCE2} README.fedora
 
@@ -132,6 +136,7 @@ fi
 * Sat Sep 22 2012 Garrett Holmstrom <gholms@fedoraproject.org> - 0.7.0-0.2.bzr659
 - Rebased against upstream rev 659
 - Fixed hostname persistence
+- Fixed ssh key printing
 
 * Mon Sep 17 2012 Garrett Holmstrom <gholms@fedoraproject.org> - 0.7.0-0.1.bzr650
 - Rebased against upstream rev 650
