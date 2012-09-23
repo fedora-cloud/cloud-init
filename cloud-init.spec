@@ -2,23 +2,17 @@
 
 Name:           cloud-init
 Version:        0.7.0
-Release:        0.1.bzr650%{?dist}
+Release:        0.2.bzr659%{?dist}
 Summary:        Cloud instance init scripts
 
 Group:          System Environment/Base
 License:        GPLv3
 URL:            http://launchpad.net/cloud-init
-# bzr export -r 650 cloud-init-0.7.0-bzr650.tar.gz lp:cloud-init
-Source0:        %{name}-%{version}-bzr650.tar.gz
+# bzr export -r 659 cloud-init-0.7.0-bzr659.tar.gz lp:cloud-init
+Source0:        %{name}-%{version}-bzr659.tar.gz
 Source1:        cloud-init-fedora.cfg
 Source2:        cloud-init-README.fedora
 Patch0:         cloud-init-0.7.0-fedora.patch
-# Make update_package_sources stop upgrading packages
-# https://code.launchpad.net/~gholms/cloud-init/yum-clean/+merge/125001
-Patch1:         cloud-init-0.7.0-yum-clean.patch
-# Add support for useradd --selinux-user
-# https://code.launchpad.net/~gholms/cloud-init/useradd-selinux/+merge/124998
-Patch2:         cloud-init-0.7.0-useradd-selinux.patch
 
 BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -52,10 +46,8 @@ ssh keys and to let the user run various scripts.
 
 
 %prep
-%setup -q -n %{name}-%{version}-bzr650
+%setup -q -n %{name}-%{version}-bzr659
 %patch0 -p1
-%patch1 -p1
-%patch2 -p1
 
 cp -p %{SOURCE2} README.fedora
 
@@ -133,6 +125,9 @@ fi
 
 
 %changelog
+* Sat Sep 22 2012 Garrett Holmstrom <gholms@fedoraproject.org> - 0.7.0-0.2.bzr659
+- Rebased against upstream rev 659
+
 * Mon Sep 17 2012 Garrett Holmstrom <gholms@fedoraproject.org> - 0.7.0-0.1.bzr650
 - Rebased against upstream rev 650
 - Added support for useradd --selinux-user
