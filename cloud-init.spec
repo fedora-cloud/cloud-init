@@ -19,6 +19,9 @@ Patch1:         cloud-init-0.7.0-hostname-refactor.patch
 # Fix fingerprint printing caused by recent user code refactoring
 # https://code.launchpad.net/~harlowja/cloud-init/patch-ssh-key-users/+merge/125606
 Patch2:         cloud-init-0.7.0-ssh-key-users.patch
+# Give sudoers 0440 permissions, not 0644
+# https://code.launchpad.net/~gholms/cloud-init/sudoers-perms/+merge/125873
+Patch3:         cloud-init-0.7.0-sudoers-perms.patch
 
 BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -56,6 +59,7 @@ ssh keys and to let the user run various scripts.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 cp -p %{SOURCE2} README.fedora
 
@@ -137,6 +141,7 @@ fi
 - Rebased against upstream rev 659
 - Fixed hostname persistence
 - Fixed ssh key printing
+- Fixed sudoers file permissions
 
 * Mon Sep 17 2012 Garrett Holmstrom <gholms@fedoraproject.org> - 0.7.0-0.1.bzr650
 - Rebased against upstream rev 650
