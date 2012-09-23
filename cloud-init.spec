@@ -2,7 +2,7 @@
 
 Name:           cloud-init
 Version:        0.7.0
-Release:        0.2.bzr659%{?dist}
+Release:        0.3.bzr659%{?dist}
 Summary:        Cloud instance init scripts
 
 Group:          System Environment/Base
@@ -29,6 +29,7 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  python-devel
 BuildRequires:  python-setuptools-devel
 BuildRequires:  systemd-units
+Requires:       dmidecode
 Requires:       e2fsprogs
 Requires:       iproute
 Requires:       libselinux-python
@@ -137,6 +138,9 @@ fi
 
 
 %changelog
+* Sat Sep 22 2012 Garrett Holmstrom <gholms@fedoraproject.org> - 0.7.0-0.3.bzr659
+- Added dmidecode dependency for DataSourceAltCloud
+
 * Sat Sep 22 2012 Garrett Holmstrom <gholms@fedoraproject.org> - 0.7.0-0.2.bzr659
 - Rebased against upstream rev 659
 - Fixed hostname persistence
