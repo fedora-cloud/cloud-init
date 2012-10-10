@@ -1,0 +1,56 @@
+Index: trunk/cloudinit/distros/fedora.py
+===================================================================
+--- trunk.orig/cloudinit/distros/fedora.py
++++ trunk/cloudinit/distros/fedora.py
+@@ -23,9 +23,23 @@
+ from cloudinit.distros import rhel
+ 
+ from cloudinit import log as logging
++from cloudinit import util
+ 
+ LOG = logging.getLogger(__name__)
+ 
+ 
+ class Distro(rhel.Distro):
+     default_user = 'ec2-user'
++
++    def set_hostname(self, hostname):
++        # sysconfig-based (inherited from rhel.Distro)
++        sysconfig_fname = self._paths.join(False, '/etc/sysconfig/network')
++        self._write_hostname(hostname, '/etc/sysconfig/network')
++        # systemd-based
++        etc_fname = self._paths.join(False, '/etc/hostname')
++        util.write_file(etc_fname, str(hostname) + '\n', 0644)
++
++        if sysconfig_fname == '/etc/sysconfig/network':
++            # Only do this if we are running in non-adjusted root mode
++            LOG.debug('Setting hostname to %s', hostname)
++            util.subp(['hostname', hostname])
+Index: trunk/templates/hosts.fedora.tmpl
+===================================================================
+--- /dev/null
++++ trunk/templates/hosts.fedora.tmpl
+@@ -0,0 +1,23 @@
++#*
++    This file /etc/cloud/templates/hosts.fedora.tmpl is only utilized
++    if enabled in cloud-config.  Specifically, in order to enable it
++    you need to add the following to config:
++      manage_etc_hosts: True
++*#
++# Your system has configured 'manage_etc_hosts' as True.
++# As a result, if you wish for changes to this file to persist
++# then you will need to either
++# a.) make changes to the master file in /etc/cloud/templates/hosts.fedora.tmpl
++# b.) change or remove the value of 'manage_etc_hosts' in
++#     /etc/cloud/cloud.cfg or cloud-config from user-data
++# 
++# The following lines are desirable for IPv4 capable hosts
++127.0.0.1 ${fqdn} ${hostname}
++127.0.0.1 localhost.localdomain localhost
++127.0.0.1 localhost4.localdomain4 localhost4
++
++# The following lines are desirable for IPv6 capable hosts
++::1 ${fqdn} ${hostname}
++::1 localhost.localdomain localhost
++::1 localhost6.localdomain6 localhost6
++

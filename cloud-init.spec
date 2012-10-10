@@ -2,26 +2,18 @@
 
 Name:           cloud-init
 Version:        0.7.0
-Release:        0.3.bzr659%{?dist}
+Release:        1%{?dist}
 Summary:        Cloud instance init scripts
 
 Group:          System Environment/Base
 License:        GPLv3
 URL:            http://launchpad.net/cloud-init
-# bzr export -r 659 cloud-init-0.7.0-bzr659.tar.gz lp:cloud-init
-Source0:        %{name}-%{version}-bzr659.tar.gz
+Source0:        https://launchpad.net/cloud-init/trunk/0.7.0/+download/cloud-init-0.7.0.tar.gz
 Source1:        cloud-init-fedora.cfg
 Source2:        cloud-init-README.fedora
 Patch0:         cloud-init-0.7.0-fedora.patch
-# Make Fedora use the same hostname-updating code as Debian (/etc/hostname)
-# https://code.launchpad.net/~gholms/cloud-init/hostname-refactor/+merge/125869
-Patch1:         cloud-init-0.7.0-hostname-refactor.patch
-# Fix fingerprint printing caused by recent user code refactoring
-# https://code.launchpad.net/~harlowja/cloud-init/patch-ssh-key-users/+merge/125606
-Patch2:         cloud-init-0.7.0-ssh-key-users.patch
-# Give sudoers 0440 permissions, not 0644
-# https://code.launchpad.net/~gholms/cloud-init/sudoers-perms/+merge/125873
-Patch3:         cloud-init-0.7.0-sudoers-perms.patch
+# Make Fedora update both /etc/hostname and /etc/sysconfig/network
+Patch1:         cloud-init-0.7.0-fedora-hostname.patch
 
 BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -56,11 +48,9 @@ ssh keys and to let the user run various scripts.
 
 
 %prep
-%setup -q -n %{name}-%{version}-bzr659
+%setup -q -n %{name}-%{version}
 %patch0 -p1
 %patch1 -p1
-%patch2 -p1
-%patch3 -p1
 
 cp -p %{SOURCE2} README.fedora
 
@@ -138,6 +128,9 @@ fi
 
 
 %changelog
+* Tue Oct  9 2012 Garrett Holmstrom <gholms@fedoraproject.org> - 0.7.0-1
+- Rebased against version 0.7.0
+
 * Sat Sep 22 2012 Garrett Holmstrom <gholms@fedoraproject.org> - 0.7.0-0.3.bzr659
 - Added dmidecode dependency for DataSourceAltCloud
 
