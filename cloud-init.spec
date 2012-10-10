@@ -130,6 +130,7 @@ fi
 %changelog
 * Tue Oct  9 2012 Garrett Holmstrom <gholms@fedoraproject.org> - 0.7.0-1
 - Rebased against version 0.7.0
+- Fixed / filesystem resizing
 
 * Sat Sep 22 2012 Garrett Holmstrom <gholms@fedoraproject.org> - 0.7.0-0.3.bzr659
 - Added dmidecode dependency for DataSourceAltCloud
