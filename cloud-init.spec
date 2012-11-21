@@ -12,6 +12,9 @@ Source0:        https://launchpad.net/cloud-init/trunk/0.7.1/+download/cloud-ini
 Source1:        cloud-init-fedora.cfg
 Source2:        cloud-init-README.fedora
 Patch0:         cloud-init-0.7.0-fedora.patch
+# Fix broken sudoers file generation
+# http://bazaar.launchpad.net/~cloud-init-dev/cloud-init/trunk/revision/740
+Patch1:         cloud-init-0.7.1-sudo-iterstr.patch
 
 BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -48,6 +51,7 @@ ssh keys and to let the user run various scripts.
 %prep
 %setup -q -n %{name}-%{version}
 %patch0 -p1
+%patch1 -p1
 
 cp -p %{SOURCE2} README.fedora
 
@@ -127,6 +131,7 @@ fi
 %changelog
 * Wed Nov 21 2012 Garrett Holmstrom <gholms@fedoraproject.org> - 0.7.1-1
 - Rebased against version 0.7.1
+- Fixed broken sudoers file generation
 
 * Tue Oct  9 2012 Garrett Holmstrom <gholms@fedoraproject.org> - 0.7.0-1
 - Rebased against version 0.7.0
