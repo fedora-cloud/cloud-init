@@ -15,6 +15,10 @@ Patch0:         cloud-init-0.7.0-fedora.patch
 # Fix broken sudoers file generation
 # http://bazaar.launchpad.net/~cloud-init-dev/cloud-init/trunk/revision/740
 Patch1:         cloud-init-0.7.1-sudo-iterstr.patch
+# Fix "resize_root: noblock"
+# https://launchpad.net/bugs/1080985
+# http://bazaar.launchpad.net/~cloud-init-dev/cloud-init/trunk/revision/743
+Patch2:         cloud-init-0.7.1-noblock.patch
 
 BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -132,6 +136,7 @@ fi
 * Wed Nov 21 2012 Garrett Holmstrom <gholms@fedoraproject.org> - 0.7.1-1
 - Rebased against version 0.7.1
 - Fixed broken sudoers file generation
+- Fixed "resize_root: noblock" [LP:1080985]
 
 * Tue Oct  9 2012 Garrett Holmstrom <gholms@fedoraproject.org> - 0.7.0-1
 - Rebased against version 0.7.0
