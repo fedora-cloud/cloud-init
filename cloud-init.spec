@@ -1,19 +1,17 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           cloud-init
-Version:        0.7.0
+Version:        0.7.1
 Release:        1%{?dist}
 Summary:        Cloud instance init scripts
 
 Group:          System Environment/Base
 License:        GPLv3
 URL:            http://launchpad.net/cloud-init
-Source0:        https://launchpad.net/cloud-init/trunk/0.7.0/+download/cloud-init-0.7.0.tar.gz
+Source0:        https://launchpad.net/cloud-init/trunk/0.7.1/+download/cloud-init-0.7.1.tar.gz
 Source1:        cloud-init-fedora.cfg
 Source2:        cloud-init-README.fedora
 Patch0:         cloud-init-0.7.0-fedora.patch
-# Make Fedora update both /etc/hostname and /etc/sysconfig/network
-Patch1:         cloud-init-0.7.0-fedora-hostname.patch
 
 BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -50,7 +48,6 @@ ssh keys and to let the user run various scripts.
 %prep
 %setup -q -n %{name}-%{version}
 %patch0 -p1
-%patch1 -p1
 
 cp -p %{SOURCE2} README.fedora
 
@@ -128,6 +125,9 @@ fi
 
 
 %changelog
+* Wed Nov 21 2012 Garrett Holmstrom <gholms@fedoraproject.org> - 0.7.1-1
+- Rebased against version 0.7.1
+
 * Tue Oct  9 2012 Garrett Holmstrom <gholms@fedoraproject.org> - 0.7.0-1
 - Rebased against version 0.7.0
 - Fixed / filesystem resizing
