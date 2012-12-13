@@ -32,6 +32,9 @@ Patch5:         cloud-init-0.6.3-yum.patch
 # https://bugs.launchpad.net/cloud-init/+bug/1040200
 # http://bazaar.launchpad.net/~cloud-init-dev/cloud-init/trunk/revision/635
 Patch6:         cloud-init-0.6.3-fqdn.patch
+# https://bugzilla.redhat.com/show_bug.cgi?id=857502
+# https://bugs.launchpad.net/cloud-init/+bug/1050962
+Patch7:         cloud-init-0.6.3-ip-based-hostname.patch
 
 Patch100:       cloud-init-0.6.3-use-python2.6.patch
 Patch101:       cloud-init-0.6.3-ext4.patch
@@ -85,6 +88,7 @@ ssh keys and to let the user run various scripts.
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
+%patch7 -p0
 %if 0%{?rhel} <= 5
 %patch100 -p0
 %patch101 -p1
@@ -165,6 +169,9 @@ fi
 
 
 %changelog
+* Wed Dec 13 2012 Andy Grimm <agrimm@gmail.com> - 0.6.3-0.12.bzr532
+- Correctly generate IP-based hostnames [RH:857502 LP:1050962]
+
 * Thu Sep 13 2012 Garrett Holmstrom <gholms@fedoraproject.org> - 0.6.3-0.11.bzr532
 - Use a FQDN (instance-data.) for instance data URL fallback [RH:850916 LP:1040200]
 
