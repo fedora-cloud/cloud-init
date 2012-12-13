@@ -2,7 +2,7 @@
 
 Name:           cloud-init
 Version:        0.7.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Cloud instance init scripts
 
 Group:          System Environment/Base
@@ -133,6 +133,9 @@ fi
 
 
 %changelog
+* Thu Dec 13 2012 Garrett Holmstrom <gholms@fedoraproject.org> - 0.7.1-2
+- Added default_user to cloud.cfg (this is required for ssh keys to work)
+
 * Wed Nov 21 2012 Garrett Holmstrom <gholms@fedoraproject.org> - 0.7.1-1
 - Rebased against version 0.7.1
 - Fixed broken sudoers file generation
