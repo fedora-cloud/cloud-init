@@ -5,7 +5,7 @@
 
 Name:           cloud-init
 Version:        0.6.3
-Release:        0.11.bzr532%{?dist}
+Release:        0.12.bzr532%{?dist}
 Summary:        Cloud instance init scripts
 
 Group:          System Environment/Base
