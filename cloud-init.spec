@@ -2,7 +2,7 @@
 
 Name:           cloud-init
 Version:        0.7.1
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Cloud instance init scripts
 
 Group:          System Environment/Base
@@ -67,6 +67,9 @@ cp -p %{SOURCE2} README.fedora
 %install
 rm -rf $RPM_BUILD_ROOT
 %{__python} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
+
+# Don't ship the tests
+rm -r $RPM_BUILD_ROOT%{python_sitelib}/tests
 
 mkdir -p $RPM_BUILD_ROOT/%{_sharedstatedir}/cloud
 
@@ -133,6 +136,9 @@ fi
 
 
 %changelog
+* Sat Apr  6 2013 Orion Poplawski <orion@cora.nwra.com> - 0.7.1-4
+- Don't ship tests
+
 * Wed Feb 13 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.7.1-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
 
