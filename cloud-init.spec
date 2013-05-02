@@ -30,6 +30,7 @@ Requires:       python-boto
 Requires:       python-cheetah
 Requires:       python-configobj
 Requires:       python-prettytable
+Requires:       python-requests
 Requires:       PyYAML
 Requires:       rsyslog
 Requires:       shadow-utils
@@ -130,6 +131,7 @@ fi
 %changelog
 * Thu May 02 2013 Steven Hardy <shardy@redhat.com> - 0.7.2-0.1.bzr809
 - Rebased against upstream rev 809, fixes several F18 related issues
+- Added dependency on python-requests
 
 * Sat Apr  6 2013 Orion Poplawski <orion@cora.nwra.com> - 0.7.1-4
 - Don't ship tests
