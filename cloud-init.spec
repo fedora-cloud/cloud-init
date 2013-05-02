@@ -1,24 +1,17 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           cloud-init
-Version:        0.7.1
-Release:        4%{?dist}
+Version:        0.7.2
+Release:        0.1.bzr809%{?dist}
 Summary:        Cloud instance init scripts
 
 Group:          System Environment/Base
 License:        GPLv3
 URL:            http://launchpad.net/cloud-init
-Source0:        https://launchpad.net/cloud-init/trunk/0.7.1/+download/cloud-init-0.7.1.tar.gz
+Source0:        http://bazaar.launchpad.net/~cloud-init-dev/cloud-init/trunk/tarball/809?/cloud-init-0.7.2-bzr809.tar.gz
 Source1:        cloud-init-fedora.cfg
 Source2:        cloud-init-README.fedora
-Patch0:         cloud-init-0.7.0-fedora.patch
-# Fix broken sudoers file generation
-# http://bazaar.launchpad.net/~cloud-init-dev/cloud-init/trunk/revision/740
-Patch1:         cloud-init-0.7.1-sudo-iterstr.patch
-# Fix "resize_root: noblock"
-# https://launchpad.net/bugs/1080985
-# http://bazaar.launchpad.net/~cloud-init-dev/cloud-init/trunk/revision/743
-Patch2:         cloud-init-0.7.1-noblock.patch
+Patch0:         cloud-init-0.7.2-fedora.patch
 
 BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -53,9 +46,8 @@ ssh keys and to let the user run various scripts.
 
 
 %prep
-%setup -q -n %{name}-%{version}
+%setup -q -n %{name}-%{version}-bzr809
 %patch0 -p1
-%patch1 -p1
 
 cp -p %{SOURCE2} README.fedora
 
@@ -136,6 +128,9 @@ fi
 
 
 %changelog
+* Thu May 02 2013 Steven Hardy <shardy@redhat.com> - 0.7.2-0.1.bzr809
+- Rebased against upstream rev 809, fixes several F18 related issues
+
 * Sat Apr  6 2013 Orion Poplawski <orion@cora.nwra.com> - 0.7.1-4
 - Don't ship tests
 
