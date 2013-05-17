@@ -2,13 +2,13 @@
 
 Name:           cloud-init
 Version:        0.7.2
-Release:        0.1.bzr809%{?dist}
+Release:        1%{?dist}
 Summary:        Cloud instance init scripts
 
 Group:          System Environment/Base
 License:        GPLv3
 URL:            http://launchpad.net/cloud-init
-Source0:        http://bazaar.launchpad.net/~cloud-init-dev/cloud-init/trunk/tarball/809?/cloud-init-0.7.2-bzr809.tar.gz
+Source0:        https://launchpad.net/cloud-init/trunk/%{version}/+download/%{name}-%{version}.tar.gz
 Source1:        cloud-init-fedora.cfg
 Source2:        cloud-init-README.fedora
 Patch0:         cloud-init-0.7.2-fedora.patch
@@ -47,7 +47,7 @@ ssh keys and to let the user run various scripts.
 
 
 %prep
-%setup -q -n %{name}-%{version}-bzr809
+%setup -q -n %{name}-%{version}
 %patch0 -p1
 
 cp -p %{SOURCE2} README.fedora
@@ -129,6 +129,9 @@ fi
 
 
 %changelog
+* Fri May 17 2013 Steven Hardy <shardy@redhat.com> - 0.7.2
+- Update to the 0.7.2 release
+
 * Thu May 02 2013 Steven Hardy <shardy@redhat.com> - 0.7.2-0.1.bzr809
 - Rebased against upstream rev 809, fixes several F18 related issues
 - Added dependency on python-requests
