@@ -2,7 +2,7 @@
 
 Name:           cloud-init
 Version:        0.7.2
-Release:        1%{?dist}
+Release:        3%{?dist}
 Summary:        Cloud instance init scripts
 
 Group:          System Environment/Base
@@ -129,6 +129,12 @@ fi
 
 
 %changelog
+* Sat Jun 15 2013 Matthew Miller <mattdm@fedoraproject.org> - 0.7.2-3
+- switch ec2-user to "fedora" --  see bugzilla #971439. To use another
+  name, use #cloud-config option "users:" in userdata in cloud metadata
+  service
+- add that user to systemd-journal group
+
 * Fri May 17 2013 Steven Hardy <shardy@redhat.com> - 0.7.2
 - Update to the 0.7.2 release
 
