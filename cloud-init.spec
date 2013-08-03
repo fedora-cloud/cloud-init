@@ -2,7 +2,7 @@
 
 Name:           cloud-init
 Version:        0.7.2
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Cloud instance init scripts
 
 Group:          System Environment/Base
@@ -129,6 +129,9 @@ fi
 
 
 %changelog
+* Sat Aug 03 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.7.2-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
+
 * Sat Jun 15 2013 Matthew Miller <mattdm@fedoraproject.org> - 0.7.2-3
 - switch ec2-user to "fedora" --  see bugzilla #971439. To use another
   name, use #cloud-config option "users:" in userdata in cloud metadata
