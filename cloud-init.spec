@@ -20,6 +20,13 @@ Patch0:         cloud-init-0.7.2-fedora.patch
 # https://bugzilla.redhat.com/show_bug.cgi?id=1008250
 Patch1:         cloud-init-0.7.2-puppetagent.patch
 
+# Send text to stdout instead of /dev/console, then tell systemd to send
+# stdout to journal+console.  Code that sends directly to syslog remains
+# unchanged.
+# https://bugzilla.redhat.com/show_bug.cgi?id=977952
+# https://bugs.launchpad.net/bugs/1228434
+Patch2:         cloud-init-0.7.2-nodevconsole.patch
+
 
 BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -58,6 +65,7 @@ ssh keys and to let the user run various scripts.
 %setup -q -n %{name}-%{version}
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 cp -p %{SOURCE2} README.fedora
 
@@ -140,6 +148,7 @@ fi
 %changelog
 * Fri Sep 20 2013 Garrett Holmstrom <gholms@fedoraproject.org> - 0.7.2-5
 - Fixed puppet agent service name [RH:1008250]
+- Let systemd handle console output [RH:977952 LP:1228434]
 
 * Sat Aug 03 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.7.2-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild

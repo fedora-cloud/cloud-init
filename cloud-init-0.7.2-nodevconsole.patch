@@ -1,0 +1,73 @@
+Index: cloud-init-0.7.2/cloudinit/util.py
+===================================================================
+--- cloud-init-0.7.2.orig/cloudinit/util.py
++++ cloud-init-0.7.2/cloudinit/util.py
+@@ -361,11 +361,11 @@ def multi_log(text, console=True, stderr
+     if stderr:
+         sys.stderr.write(text)
+     if console:
+-        # Don't use the write_file since
+-        # this might be 'sensitive' info (not debug worthy?)
+-        with open('/dev/console', 'wb') as wfh:
+-            wfh.write(text)
+-            wfh.flush()
++        # Some containers lack /dev/console, so we send output to
++        # stdout and configure upstart with "console output" and
++        # systemd with "journal+console" and let them take care of
++        # getting output to the console.
++        print text
+     if log:
+         if text[-1] == "\n":
+             log.log(log_level, text[:-1])
+Index: cloud-init-0.7.2/systemd/cloud-config.service
+===================================================================
+--- cloud-init-0.7.2.orig/systemd/cloud-config.service
++++ cloud-init-0.7.2/systemd/cloud-config.service
+@@ -11,7 +11,7 @@ RemainAfterExit=yes
+ TimeoutSec=0
+ 
+ # Output needs to appear in instance console output
+-StandardOutput=tty
++StandardOutput=journal+console
+ 
+ [Install]
+ WantedBy=multi-user.target
+Index: cloud-init-0.7.2/systemd/cloud-final.service
+===================================================================
+--- cloud-init-0.7.2.orig/systemd/cloud-final.service
++++ cloud-init-0.7.2/systemd/cloud-final.service
+@@ -11,7 +11,7 @@ RemainAfterExit=yes
+ TimeoutSec=0
+ 
+ # Output needs to appear in instance console output
+-StandardOutput=tty
++StandardOutput=journal+console
+ 
+ [Install]
+ WantedBy=multi-user.target
+Index: cloud-init-0.7.2/systemd/cloud-init-local.service
+===================================================================
+--- cloud-init-0.7.2.orig/systemd/cloud-init-local.service
++++ cloud-init-0.7.2/systemd/cloud-init-local.service
+@@ -10,7 +10,7 @@ RemainAfterExit=yes
+ TimeoutSec=0
+ 
+ # Output needs to appear in instance console output
+-StandardOutput=tty
++StandardOutput=journal+console
+ 
+ [Install]
+ WantedBy=multi-user.target
+Index: cloud-init-0.7.2/systemd/cloud-init.service
+===================================================================
+--- cloud-init-0.7.2.orig/systemd/cloud-init.service
++++ cloud-init-0.7.2/systemd/cloud-init.service
+@@ -11,7 +11,7 @@ RemainAfterExit=yes
+ TimeoutSec=0
+ 
+ # Output needs to appear in instance console output
+-StandardOutput=tty
++StandardOutput=journal+console
+ 
+ [Install]
+ WantedBy=multi-user.target
