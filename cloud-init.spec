@@ -2,7 +2,7 @@
 
 Name:           cloud-init
 Version:        0.7.2
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Cloud instance init scripts
 
 Group:          System Environment/Base
@@ -11,7 +11,15 @@ URL:            http://launchpad.net/cloud-init
 Source0:        https://launchpad.net/cloud-init/trunk/%{version}/+download/%{name}-%{version}.tar.gz
 Source1:        cloud-init-fedora.cfg
 Source2:        cloud-init-README.fedora
+
+# Deal with Fedora/Ubuntu path differences
 Patch0:         cloud-init-0.7.2-fedora.patch
+
+# "puppet" service was renamed to "puppetagent" in F19 as it was ported to
+# systemd
+# https://bugzilla.redhat.com/show_bug.cgi?id=1008250
+Patch1:         cloud-init-0.7.2-puppetagent.patch
+
 
 BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -49,6 +57,7 @@ ssh keys and to let the user run various scripts.
 %prep
 %setup -q -n %{name}-%{version}
 %patch0 -p1
+%patch1 -p1
 
 cp -p %{SOURCE2} README.fedora
 
@@ -129,6 +138,9 @@ fi
 
 
 %changelog
+* Fri Sep 20 2013 Garrett Holmstrom <gholms@fedoraproject.org> - 0.7.2-5
+- Fixed puppet agent service name [RH:1008250]
+
 * Sat Aug 03 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.7.2-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
 

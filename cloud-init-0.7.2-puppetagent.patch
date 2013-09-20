@@ -1,0 +1,19 @@
+Index: cloud-init-0.7.2/cloudinit/config/cc_puppet.py
+===================================================================
+--- cloud-init-0.7.2.orig/cloudinit/config/cc_puppet.py
++++ cloud-init-0.7.2/cloudinit/config/cc_puppet.py
+@@ -39,7 +39,7 @@ def _autostart_puppet(log):
+                   '-e', 's/^START=.*/START=yes/',
+                   '/etc/default/puppet'], capture=False)
+     elif os.path.exists('/bin/systemctl'):
+-        util.subp(['/bin/systemctl', 'enable', 'puppet.service'],
++        util.subp(['/bin/systemctl', 'enable', 'puppetagent.service'],
+                   capture=False)
+     elif os.path.exists('/sbin/chkconfig'):
+         util.subp(['/sbin/chkconfig', 'puppet', 'on'], capture=False)
+@@ -115,4 +115,4 @@ def handle(name, cfg, cloud, log, _args)
+     _autostart_puppet(log)
+ 
+     # Start puppetd
+-    util.subp(['service', 'puppet', 'start'], capture=False)
++    util.subp(['service', 'puppetagent', 'start'], capture=False)
