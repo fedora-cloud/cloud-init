@@ -27,6 +27,12 @@ Patch1:         cloud-init-0.7.2-puppetagent.patch
 # https://bugs.launchpad.net/bugs/1228434
 Patch2:         cloud-init-0.7.2-nodevconsole.patch
 
+# Fix restorecon failure when SELinux is disabled
+# https://bugzilla.redhat.com/show_bug.cgi?id=967002
+# https://bugs.launchpad.net/bugs/1228441
+Patch3:         cloud-init-0.7.2-selinux-enabled.patch
+
+
 
 BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -66,6 +72,7 @@ ssh keys and to let the user run various scripts.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 cp -p %{SOURCE2} README.fedora
 
@@ -149,6 +156,7 @@ fi
 * Fri Sep 20 2013 Garrett Holmstrom <gholms@fedoraproject.org> - 0.7.2-5
 - Fixed puppet agent service name [RH:1008250]
 - Let systemd handle console output [RH:977952 LP:1228434]
+- Fixed restorecon failure when selinux is disabled [RH:967002 LP:1228441]
 
 * Sat Aug 03 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.7.2-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
