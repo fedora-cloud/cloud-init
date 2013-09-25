@@ -2,7 +2,7 @@
 
 Name:           cloud-init
 Version:        0.7.2
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        Cloud instance init scripts
 
 Group:          System Environment/Base
