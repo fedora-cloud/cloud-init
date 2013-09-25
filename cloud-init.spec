@@ -162,6 +162,7 @@ fi
 - Let systemd handle console output [RH:977952 LP:1228434]
 - Fixed restorecon failure when selinux is disabled [RH:967002 LP:1228441]
 - Fixed rsyslog log filtering
+- Added missing modules [RH:966888]
 
 * Sat Aug 03 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.7.2-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
