@@ -2,7 +2,7 @@
 
 Name:           cloud-init
 Version:        0.7.2
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Cloud instance init scripts
 
 Group:          System Environment/Base
@@ -157,6 +157,9 @@ fi
 
 
 %changelog
+* Tue Sep 24 2013 Garrett Holmstrom <gholms@fedoraproject.org> - 0.7.2-6
+- Added yum-add-repo module
+
 * Fri Sep 20 2013 Garrett Holmstrom <gholms@fedoraproject.org> - 0.7.2-5
 - Fixed puppet agent service name [RH:1008250]
 - Let systemd handle console output [RH:977952 LP:1228434]
