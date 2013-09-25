@@ -58,7 +58,6 @@ Requires:       python-requests
 Requires:       PyYAML
 Requires:       rsyslog
 Requires:       shadow-utils
-Requires:       xfsprogs
 Requires:       /usr/bin/run-parts
 Requires(post):   systemd-units
 Requires(preun):  systemd-units
@@ -157,6 +156,9 @@ fi
 
 
 %changelog
+* Tue Sep 24 2013 Garrett Holmstrom <gholms@fedoraproject.org> - 0.7.2-7
+- Dropped xfsprogs dependency [RH:974329]
+
 * Tue Sep 24 2013 Garrett Holmstrom <gholms@fedoraproject.org> - 0.7.2-6
 - Added yum-add-repo module
 
