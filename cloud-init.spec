@@ -136,7 +136,7 @@ fi
 
 
 %changelog
-* Wed Jan 22 2013 Sam Kottler <shk@redhat.com> - 0.7.4-1
+* Wed Jan 22 2014 Sam Kottler <shk@redhat.com> - 0.7.4-1
 - update to 0.7.4
 
 * Wed Jun 26 2013 Steven Hardy <shardy@redhat.com> 0.7.2-2
