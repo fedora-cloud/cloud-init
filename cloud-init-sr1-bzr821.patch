@@ -1,0 +1,24 @@
+=== modified file 'cloud-init-0.7.2/cloudinit/sources/DataSourceConfigDrive.py'
+--- cloud-init-0.7.2/cloudinit/sources/DataSourceConfigDrive.py	2013-03-26 21:48:40 +0000
++++ cloud-init-0.7.2/cloudinit/sources/DataSourceConfigDrive.py	2013-06-05 00:42:55 +0000
+@@ -260,6 +260,7 @@
+ 
+     # Query optical drive to get it in blkid cache for 2.6 kernels
+     util.find_devs_with(path="/dev/sr0")
++    util.find_devs_with(path="/dev/sr1")
+ 
+     by_fstype = (util.find_devs_with("TYPE=vfat") +
+                  util.find_devs_with("TYPE=iso9660"))
+
+=== modified file 'cloud-init-0.7.2/cloudinit/sources/DataSourceNoCloud.py'
+--- cloud-init-0.7.2/cloudinit/sources/DataSourceNoCloud.py	2013-03-26 21:48:40 +0000
++++ cloud-init-0.7.2/cloudinit/sources/DataSourceNoCloud.py	2013-06-05 00:42:55 +0000
+@@ -89,6 +89,7 @@
+         if label is not None:
+             # Query optical drive to get it in blkid cache for 2.6 kernels
+             util.find_devs_with(path="/dev/sr0")
++            util.find_devs_with(path="/dev/sr1")
+ 
+             fslist = util.find_devs_with("TYPE=vfat")
+             fslist.extend(util.find_devs_with("TYPE=iso9660"))
+

@@ -4,40 +4,17 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           cloud-init
-Version:        0.6.3
-Release:        0.12.bzr532%{?dist}
+Version:        0.7.4
+Release:        1%{?dist}
 Summary:        Cloud instance init scripts
 
 Group:          System Environment/Base
 License:        GPLv3
 URL:            http://launchpad.net/cloud-init
-# bzr export -r 532 cloud-init-0.6.3-bzr532.tar.gz lp:cloud-init
-Source0:        %{name}-%{version}-bzr532.tar.gz
-Source1:        cloud-init-fedora.cfg
+Source0:        https://launchpad.net/cloud-init/trunk/%{version}/+download/cloud-init-%{version}.tar.gz
+Source1:        cloud-init-rhel.cfg
 Source2:        cloud-init-README.fedora
-
-Patch0:         cloud-init-0.6.3-fedora.patch
-# Make runparts() work on Fedora
-# https://bugs.launchpad.net/cloud-init/+bug/934404
-Patch1:         cloud-init-0.6.3-no-runparts.patch
-# https://bugs.launchpad.net/cloud-init/+bug/970071
-Patch2:         cloud-init-0.6.3-lp970071.patch
-# Add sysv init scripts
-Patch3:         cloud-init-0.6.3-sysv.patch
-# Support subprocess on python < 2.7
-Patch4:         cloud-init-0.6.3-subprocess-2.6.patch
-# Add support for installing packages with yum
-Patch5:         cloud-init-0.6.3-yum.patch
-# https://bugzilla.redhat.com/show_bug.cgi?id=850916
-# https://bugs.launchpad.net/cloud-init/+bug/1040200
-# http://bazaar.launchpad.net/~cloud-init-dev/cloud-init/trunk/revision/635
-Patch6:         cloud-init-0.6.3-fqdn.patch
-# https://bugzilla.redhat.com/show_bug.cgi?id=857502
-# https://bugs.launchpad.net/cloud-init/+bug/1050962
-Patch7:         cloud-init-0.6.3-ip-based-hostname.patch
-
-Patch100:       cloud-init-0.6.3-use-python2.6.patch
-Patch101:       cloud-init-0.6.3-ext4.patch
+Patch0:         cloud-init-0.7.2-fedora.patch
 
 BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -51,17 +28,22 @@ BuildRequires:  python26-devel
 BuildRequires:  python-setuptools
 Requires:       e4fsprogs
 %endif
+Requires:       dmidecode
 Requires:       iproute
 Requires:       libselinux-python
 Requires:       net-tools
+Requires:       policycoreutils-python
 Requires:       procps
+Requires:       python-argparse
 %if 0%{?rhel} >= 6
-Requires:       python-boto
+Requires:       python-boto >= 2.6.0
 Requires:       python-cheetah
 Requires:       python-configobj
+Requires:       python-prettytable
 Requires:       PyYAML
+Requires:       python-requests
 %else
-Requires:       python26-boto
+Requires:       python26-boto >= 2.6.0
 Requires:       python26-cheetah
 Requires:       python26-configobj
 Requires:       python26-PyYAML
@@ -80,22 +62,10 @@ ssh keys and to let the user run various scripts.
 
 
 %prep
-%setup -q -n %{name}-%{version}-bzr532
-%patch0 -p0
-%patch1 -p0
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
-%patch5 -p1
-%patch6 -p1
-%patch7 -p0
-%if 0%{?rhel} <= 5
-%patch100 -p0
-%patch101 -p1
-%endif
+%setup -q -n %{name}-%{version}
+%patch0 -p1
 
 cp -p %{SOURCE2} README.fedora
-
 
 %build
 %{__python} setup.py build
@@ -105,21 +75,18 @@ cp -p %{SOURCE2} README.fedora
 rm -rf $RPM_BUILD_ROOT
 %{__python} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
 
-for x in $RPM_BUILD_ROOT/%{_bindir}/*.py; do mv "$x" "${x%.py}"; done
-chmod +x $RPM_BUILD_ROOT/%{python_sitelib}/cloudinit/SshUtil.py
 mkdir -p $RPM_BUILD_ROOT/%{_sharedstatedir}/cloud
 
 # We supply our own config file since our software differs from Ubuntu's.
 cp -p %{SOURCE1} $RPM_BUILD_ROOT/%{_sysconfdir}/cloud/cloud.cfg
 
-# Note that /etc/rsyslog.d didn't exist by default until F15.
-# el6 request: https://bugzilla.redhat.com/show_bug.cgi?id=740420
 mkdir -p $RPM_BUILD_ROOT/%{_sysconfdir}/rsyslog.d
 cp -p tools/21-cloudinit.conf $RPM_BUILD_ROOT/%{_sysconfdir}/rsyslog.d/21-cloudinit.conf
 
 # Install the init scripts
 mkdir -p $RPM_BUILD_ROOT/%{_initrddir}
-install -p -m 755 sysv/* $RPM_BUILD_ROOT/%{_initrddir}/
+install -p -m 755 sysvinit/debian/* $RPM_BUILD_ROOT/%{_initrddir}/
+install -p -m 755 sysvinit/redhat/* $RPM_BUILD_ROOT/%{_initrddir}/
 
 
 %clean
@@ -169,8 +136,28 @@ fi
 
 
 %changelog
-* Wed Dec 13 2012 Andy Grimm <agrimm@gmail.com> - 0.6.3-0.12.bzr532
-- Correctly generate IP-based hostnames [RH:857502 LP:1050962]
+* Wed Jan 22 2013 Sam Kottler <shk@redhat.com> - 0.7.4-1
+- update to 0.7.4
+
+* Wed Jun 26 2013 Steven Hardy <shardy@redhat.com> 0.7.2-2
+- support optical drives with dev node /dev/sr1 (backport of LP rev 821))
+
+* Tue May 28 2013 Steven Hardy <shardy@redhat.com> 0.7.2-1
+- Update to 0.7.2
+- Added dependency on python-requests
+- Removed write-ssh-key-fingerprints patch (in upstream release)
+- Added boto >= 2.6.0 requirement
+
+* Fri Nov 16 2012 Alan Pevec <apevec@redhat.com> 0.7.1-2
+- define default user (Joe VLcek)
+- set distro to rhel in default config
+- adjust logger call for older util-linux
+
+* Wed Nov 14 2012 Alan Pevec <apevec@redhat.com> 0.7.1-1
+- Update to 0.7.1
+
+* Tue Oct  9 2012 Garrett Holmstrom <gholms@fedoraproject.org> - 0.7.0-1
+- Rebased against version 0.7.0
 
 * Thu Sep 13 2012 Garrett Holmstrom <gholms@fedoraproject.org> - 0.6.3-0.11.bzr532
 - Use a FQDN (instance-data.) for instance data URL fallback [RH:850916 LP:1040200]
