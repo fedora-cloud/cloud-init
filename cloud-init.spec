@@ -2,7 +2,7 @@
 
 Name:           cloud-init
 Version:        0.7.2
-Release:        7%{?dist}
+Release:        8%{?dist}
 Summary:        Cloud instance init scripts
 
 Group:          System Environment/Base
@@ -15,26 +15,21 @@ Source2:        cloud-init-README.fedora
 # Deal with Fedora/Ubuntu path differences
 Patch0:         cloud-init-0.7.2-fedora.patch
 
-# "puppet" service was renamed to "puppetagent" in F19 as it was ported to
-# systemd
-# https://bugzilla.redhat.com/show_bug.cgi?id=1008250
-Patch1:         cloud-init-0.7.2-puppetagent.patch
-
 # Send text to stdout instead of /dev/console, then tell systemd to send
 # stdout to journal+console.  Code that sends directly to syslog remains
 # unchanged.
 # https://bugzilla.redhat.com/show_bug.cgi?id=977952
 # https://bugs.launchpad.net/bugs/1228434
-Patch2:         cloud-init-0.7.2-nodevconsole.patch
+Patch1:         cloud-init-0.7.2-nodevconsole.patch
 
 # Fix restorecon failure when SELinux is disabled
 # https://bugzilla.redhat.com/show_bug.cgi?id=967002
 # https://bugs.launchpad.net/bugs/1228441
-Patch3:         cloud-init-0.7.2-selinux-enabled.patch
+Patch2:         cloud-init-0.7.2-selinux-enabled.patch
 
 # Fix rsyslog log filtering
 # https://code.launchpad.net/~gholms/cloud-init/rsyslog-programname/+merge/186906
-Patch4:         cloud-init-0.7.2-rsyslog-programname.patch
+Patch3:         cloud-init-0.7.2-rsyslog-programname.patch
 
 
 BuildArch:      noarch
@@ -75,7 +70,6 @@ ssh keys and to let the user run various scripts.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
-%patch4 -p1
 
 cp -p %{SOURCE2} README.fedora
 
@@ -156,6 +150,9 @@ fi
 
 
 %changelog
+* Sat Jan 25 2014 Sam Kottler <skottler@fedoraproject.org> - 0.7.2-8
+- Remove patch to the Puppet service unit nane [RH:1057860]
+
 * Tue Sep 24 2013 Garrett Holmstrom <gholms@fedoraproject.org> - 0.7.2-7
 - Dropped xfsprogs dependency [RH:974329]
 
