@@ -137,7 +137,7 @@ fi
 
 %changelog
 * Wed Jan 22 2014 Sam Kottler <shk@redhat.com> - 0.7.4-1
-- update to 0.7.4
+- update to 0.7.4 [BZ:907547]
 
 * Wed Jun 26 2013 Steven Hardy <shardy@redhat.com> 0.7.2-2
 - support optical drives with dev node /dev/sr1 (backport of LP rev 821))
