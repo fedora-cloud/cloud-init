@@ -5,7 +5,7 @@
 
 Name:           cloud-init
 Version:        0.7.4
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Cloud instance init scripts
 
 Group:          System Environment/Base
@@ -36,11 +36,12 @@ Requires:       policycoreutils-python
 Requires:       procps
 Requires:       python-argparse
 %if 0%{?rhel} >= 6
+Requires:       PyYAML
 Requires:       python-boto >= 2.6.0
 Requires:       python-cheetah
 Requires:       python-configobj
+Requires:       python-jsonpatch
 Requires:       python-prettytable
-Requires:       PyYAML
 Requires:       python-requests
 %else
 Requires:       python26-boto >= 2.6.0
@@ -136,6 +137,9 @@ fi
 
 
 %changelog
+* Mon Jan 27 2014 Sam Kottler <shk@redhat.com> - 0.7.4-2
+- Add runtime requirement on python-jsonpatch
+
 * Wed Jan 22 2014 Sam Kottler <shk@redhat.com> - 0.7.4-1
 - update to 0.7.4 [BZ:907547]
 
