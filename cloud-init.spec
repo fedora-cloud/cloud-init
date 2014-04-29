@@ -136,7 +136,7 @@ fi
 
 
 %changelog
-* Apr 29 2014 Sam Kottler <skottler@fedoraproject.org> - 0.7.5-1
+* Tue Apr 29 2014 Sam Kottler <skottler@fedoraproject.org> - 0.7.5-1
 - Update to 0.7.5 and remove patches which landed in the release
 
 * Sat Jan 25 2014 Sam Kottler <skottler@fedoraproject.org> - 0.7.2-8
