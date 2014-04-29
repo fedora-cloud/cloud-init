@@ -1,0 +1,11 @@
+Index: cloud-init-0.7.2/tools/21-cloudinit.conf
+===================================================================
+--- cloud-init-0.7.2.orig/tools/21-cloudinit.conf
++++ cloud-init-0.7.2/tools/21-cloudinit.conf
+@@ -1,5 +1,5 @@
+ # Log cloudinit generated log messages to file
+-:syslogtag, isequal, "[CLOUDINIT]" /var/log/cloud-init.log
++:programname, isequal, "cloud-init" /var/log/cloud-init.log
+ 
+ # comment out the following line to allow CLOUDINIT messages through.
+ # Doing so means you'll also get CLOUDINIT messages in /var/log/syslog

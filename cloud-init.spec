@@ -1,8 +1,8 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           cloud-init
-Version:        0.7.2
-Release:        8%{?dist}
+Version:        0.7.5
+Release:        1%{?dist}
 Summary:        Cloud instance init scripts
 
 Group:          System Environment/Base
@@ -13,23 +13,11 @@ Source1:        cloud-init-fedora.cfg
 Source2:        cloud-init-README.fedora
 
 # Deal with Fedora/Ubuntu path differences
-Patch0:         cloud-init-0.7.2-fedora.patch
-
-# Send text to stdout instead of /dev/console, then tell systemd to send
-# stdout to journal+console.  Code that sends directly to syslog remains
-# unchanged.
-# https://bugzilla.redhat.com/show_bug.cgi?id=977952
-# https://bugs.launchpad.net/bugs/1228434
-Patch1:         cloud-init-0.7.2-nodevconsole.patch
-
-# Fix restorecon failure when SELinux is disabled
-# https://bugzilla.redhat.com/show_bug.cgi?id=967002
-# https://bugs.launchpad.net/bugs/1228441
-Patch2:         cloud-init-0.7.2-selinux-enabled.patch
+Patch0:         cloud-init-0.7.5-fedora.patch
 
 # Fix rsyslog log filtering
 # https://code.launchpad.net/~gholms/cloud-init/rsyslog-programname/+merge/186906
-Patch3:         cloud-init-0.7.2-rsyslog-programname.patch
+Patch1:         cloud-init-0.7.5-rsyslog-programname.patch
 
 
 BuildArch:      noarch
@@ -68,8 +56,6 @@ ssh keys and to let the user run various scripts.
 %setup -q -n %{name}-%{version}
 %patch0 -p1
 %patch1 -p1
-%patch2 -p1
-%patch3 -p1
 
 cp -p %{SOURCE2} README.fedora
 
@@ -150,6 +136,9 @@ fi
 
 
 %changelog
+* Apr 29 2014 Sam Kottler <skottler@fedoraproject.org> - 0.7.5-1
+- Update to 0.7.5 and remove patches which landed in the release
+
 * Sat Jan 25 2014 Sam Kottler <skottler@fedoraproject.org> - 0.7.2-8
 - Remove patch to the Puppet service unit nane [RH:1057860]
 
