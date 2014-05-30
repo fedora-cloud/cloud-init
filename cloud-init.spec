@@ -2,7 +2,7 @@
 
 Name:           cloud-init
 Version:        0.7.5
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Cloud instance init scripts
 
 Group:          System Environment/Base
@@ -39,6 +39,7 @@ Requires:       python-configobj
 Requires:       python-prettytable
 Requires:       python-requests
 Requires:       PyYAML
+Requires:       python-jsonpatch
 Requires:       rsyslog
 Requires:       shadow-utils
 Requires:       /usr/bin/run-parts
@@ -136,6 +137,9 @@ fi
 
 
 %changelog
+* Fri May 30 2014 Matthew Miller <mattdm@fedoraproject.org> - 0.7.5-2
+- add missing python-jsonpatch dependency
+
 * Tue Apr 29 2014 Sam Kottler <skottler@fedoraproject.org> - 0.7.5-1
 - Update to 0.7.5 and remove patches which landed in the release
 
