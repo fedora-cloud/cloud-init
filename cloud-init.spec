@@ -1,8 +1,12 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
+# The only reason we are archful is because dmidecode is ExclusiveArch
+# https://bugzilla.redhat.com/show_bug.cgi?id=1067089
+%global debug_package %{nil}
+
 Name:           cloud-init
 Version:        0.7.5
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Cloud instance init scripts
 
 Group:          System Environment/Base
@@ -19,14 +23,18 @@ Patch0:         cloud-init-0.7.5-fedora.patch
 # https://code.launchpad.net/~gholms/cloud-init/rsyslog-programname/+merge/186906
 Patch1:         cloud-init-0.7.5-rsyslog-programname.patch
 
+# Deal with noarch -> arch
+# https://bugzilla.redhat.com/show_bug.cgi?id=1067089
+Obsoletes:      cloud-init < 0.7.5-3
 
-BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  python-devel
 BuildRequires:  python-setuptools-devel
 BuildRequires:  systemd-units
+%ifarch %{?ix86} x86_64 ia64
 Requires:       dmidecode
+%endif
 Requires:       e2fsprogs
 Requires:       iproute
 Requires:       libselinux-python
@@ -137,6 +145,9 @@ fi
 
 
 %changelog
+* Mon Jun  2 2014 Garrett Holmstrom <gholms@fedoraproject.org> - 0.7.5-3
+- Make dmidecode dependency arch-dependent [RH:1025071 RH:1067089]
+
 * Fri May 30 2014 Matthew Miller <mattdm@fedoraproject.org> - 0.7.5-2
 - add missing python-jsonpatch dependency [RH:1103281]
 
