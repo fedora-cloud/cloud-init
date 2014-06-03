@@ -2,7 +2,7 @@
 
 Name:           cloud-init
 Version:        0.7.2
-Release:        8%{?dist}
+Release:        9%{?dist}
 Summary:        Cloud instance init scripts
 
 Group:          System Environment/Base
@@ -150,6 +150,9 @@ fi
 
 
 %changelog
+* Mon Jun  2 2014 Garrett Holmstrom <gholms@fedoraproject.org> - 0.7.2-9
+- Write /etc/locale.conf instead of /etc/sysconfig/i18n [RH:1008250]
+
 * Sat Jan 25 2014 Sam Kottler <skottler@fedoraproject.org> - 0.7.2-8
 - Remove patch to the Puppet service unit nane [RH:1057860]
 
