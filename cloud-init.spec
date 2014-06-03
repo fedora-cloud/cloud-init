@@ -11,6 +11,7 @@ URL:            http://launchpad.net/cloud-init
 Source0:        https://launchpad.net/cloud-init/trunk/%{version}/+download/%{name}-%{version}.tar.gz
 Source1:        cloud-init-fedora.cfg
 Source2:        cloud-init-README.fedora
+Source3:        cloud-init-tmpfiles.conf
 
 # Deal with Fedora/Ubuntu path differences
 Patch0:         cloud-init-0.7.2-fedora.patch
@@ -85,7 +86,12 @@ rm -rf $RPM_BUILD_ROOT
 # Don't ship the tests
 rm -r $RPM_BUILD_ROOT%{python_sitelib}/tests
 
-mkdir -p $RPM_BUILD_ROOT/%{_sharedstatedir}/cloud
+mkdir -p $RPM_BUILD_ROOT/var/lib/cloud
+
+# /run/cloud-init needs a tmpfiles.d entry
+mkdir -p $RPM_BUILD_ROOT/run/cloud-init
+mkdir -p         $RPM_BUILD_ROOT/%{_tmpfilesdir}
+cp -p %{SOURCE3} $RPM_BUILD_ROOT/%{_tmpfilesdir}/%{name}.conf
 
 # We supply our own config file since our software differs from Ubuntu's.
 cp -p %{SOURCE1} $RPM_BUILD_ROOT/%{_sysconfdir}/cloud/cloud.cfg
@@ -94,8 +100,9 @@ mkdir -p $RPM_BUILD_ROOT/%{_sysconfdir}/rsyslog.d
 cp -p tools/21-cloudinit.conf $RPM_BUILD_ROOT/%{_sysconfdir}/rsyslog.d/21-cloudinit.conf
 
 # Install the systemd bits
-mkdir -p        $RPM_BUILD_ROOT/%{_unitdir}
-cp -p systemd/* $RPM_BUILD_ROOT/%{_unitdir}
+mkdir -p         $RPM_BUILD_ROOT/%{_unitdir}
+cp -p systemd/*  $RPM_BUILD_ROOT/%{_unitdir}
+
 
 
 %clean
@@ -140,11 +147,13 @@ fi
 %{_unitdir}/cloud-final.service
 %{_unitdir}/cloud-init-local.service
 %{_unitdir}/cloud-init.service
+%{_tmpfilesdir}/%{name}.conf
 %{python_sitelib}/*
 %{_libexecdir}/%{name}
 %{_bindir}/cloud-init*
 %doc %{_datadir}/doc/%{name}
-%dir %{_sharedstatedir}/cloud
+%dir /run/cloud-init
+%dir /var/lib/cloud
 
 %config(noreplace) %{_sysconfdir}/rsyslog.d/21-cloudinit.conf
 
@@ -152,6 +161,7 @@ fi
 %changelog
 * Mon Jun  2 2014 Garrett Holmstrom <gholms@fedoraproject.org> - 0.7.2-9
 - Write /etc/locale.conf instead of /etc/sysconfig/i18n [RH:1008250]
+- Add tmpfiles.d configuration for /run/cloud-init [RH:1103761]
 
 * Sat Jan 25 2014 Sam Kottler <skottler@fedoraproject.org> - 0.7.2-8
 - Remove patch to the Puppet service unit nane [RH:1057860]
