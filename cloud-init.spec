@@ -1,4 +1,5 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
+%{!?license: %global license %%doc}
 
 Name:           cloud-init
 Version:        0.7.2
@@ -135,7 +136,8 @@ fi
 
 
 %files
-%doc ChangeLog LICENSE TODO README.fedora
+%license LICENSE
+%doc ChangeLog TODO README.fedora
 %config(noreplace) %{_sysconfdir}/cloud/cloud.cfg
 %dir               %{_sysconfdir}/cloud/cloud.cfg.d
 %config(noreplace) %{_sysconfdir}/cloud/cloud.cfg.d/*.cfg
@@ -162,6 +164,7 @@ fi
 * Mon Jun  2 2014 Garrett Holmstrom <gholms@fedoraproject.org> - 0.7.2-9
 - Write /etc/locale.conf instead of /etc/sysconfig/i18n [RH:1008250]
 - Add tmpfiles.d configuration for /run/cloud-init [RH:1103761]
+- Use the license rpm macro
 
 * Sat Jan 25 2014 Sam Kottler <skottler@fedoraproject.org> - 0.7.2-8
 - Remove patch to the Puppet service unit nane [RH:1057860]
