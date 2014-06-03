@@ -38,7 +38,7 @@ BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  python-devel
-BuildRequires:  python-setuptools-devel
+BuildRequires:  python-setuptools
 BuildRequires:  systemd-units
 Requires:       dmidecode
 Requires:       e2fsprogs
@@ -165,6 +165,7 @@ fi
 - Write /etc/locale.conf instead of /etc/sysconfig/i18n [RH:1008250]
 - Add tmpfiles.d configuration for /run/cloud-init [RH:1103761]
 - Use the license rpm macro
+- BuildRequire python-setuptools, not python-setuptools-devel
 
 * Sat Jan 25 2014 Sam Kottler <skottler@fedoraproject.org> - 0.7.2-8
 - Remove patch to the Puppet service unit nane [RH:1057860]
