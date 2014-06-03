@@ -138,7 +138,7 @@ fi
 
 %changelog
 * Fri May 30 2014 Matthew Miller <mattdm@fedoraproject.org> - 0.7.5-2
-- add missing python-jsonpatch dependency
+- add missing python-jsonpatch dependency [RH:1103281]
 
 * Tue Apr 29 2014 Sam Kottler <skottler@fedoraproject.org> - 0.7.5-1
 - Update to 0.7.5 and remove patches which landed in the release
