@@ -1,4 +1,5 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
+%{!?license: %global license %%doc}
 
 # The only reason we are archful is because dmidecode is ExclusiveArch
 # https://bugzilla.redhat.com/show_bug.cgi?id=1067089
@@ -15,6 +16,7 @@ URL:            http://launchpad.net/cloud-init
 Source0:        https://launchpad.net/cloud-init/trunk/%{version}/+download/%{name}-%{version}.tar.gz
 Source1:        cloud-init-fedora.cfg
 Source2:        cloud-init-README.fedora
+Source3:        cloud-init-tmpfiles.conf
 
 # Deal with Fedora/Ubuntu path differences
 Patch0:         cloud-init-0.7.5-fedora.patch
@@ -30,7 +32,7 @@ Obsoletes:      cloud-init < 0.7.5-3
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  python-devel
-BuildRequires:  python-setuptools-devel
+BuildRequires:  python-setuptools
 BuildRequires:  systemd-units
 %ifarch %{?ix86} x86_64 ia64
 Requires:       dmidecode
@@ -80,7 +82,12 @@ rm -rf $RPM_BUILD_ROOT
 # Don't ship the tests
 rm -r $RPM_BUILD_ROOT%{python_sitelib}/tests
 
-mkdir -p $RPM_BUILD_ROOT/%{_sharedstatedir}/cloud
+mkdir -p $RPM_BUILD_ROOT/var/lib/cloud
+
+# /run/cloud-init needs a tmpfiles.d entry
+mkdir -p $RPM_BUILD_ROOT/run/cloud-init
+mkdir -p         $RPM_BUILD_ROOT/%{_tmpfilesdir}
+cp -p %{SOURCE3} $RPM_BUILD_ROOT/%{_tmpfilesdir}/%{name}.conf
 
 # We supply our own config file since our software differs from Ubuntu's.
 cp -p %{SOURCE1} $RPM_BUILD_ROOT/%{_sysconfdir}/cloud/cloud.cfg
@@ -89,8 +96,9 @@ mkdir -p $RPM_BUILD_ROOT/%{_sysconfdir}/rsyslog.d
 cp -p tools/21-cloudinit.conf $RPM_BUILD_ROOT/%{_sysconfdir}/rsyslog.d/21-cloudinit.conf
 
 # Install the systemd bits
-mkdir -p        $RPM_BUILD_ROOT/%{_unitdir}
-cp -p systemd/* $RPM_BUILD_ROOT/%{_unitdir}
+mkdir -p         $RPM_BUILD_ROOT/%{_unitdir}
+cp -p systemd/*  $RPM_BUILD_ROOT/%{_unitdir}
+
 
 
 %clean
@@ -123,7 +131,8 @@ fi
 
 
 %files
-%doc ChangeLog LICENSE TODO README.fedora
+%license LICENSE
+%doc ChangeLog TODO README.fedora
 %config(noreplace) %{_sysconfdir}/cloud/cloud.cfg
 %dir               %{_sysconfdir}/cloud/cloud.cfg.d
 %config(noreplace) %{_sysconfdir}/cloud/cloud.cfg.d/*.cfg
@@ -135,11 +144,13 @@ fi
 %{_unitdir}/cloud-final.service
 %{_unitdir}/cloud-init-local.service
 %{_unitdir}/cloud-init.service
+%{_tmpfilesdir}/%{name}.conf
 %{python_sitelib}/*
 %{_libexecdir}/%{name}
 %{_bindir}/cloud-init*
 %doc %{_datadir}/doc/%{name}
-%dir %{_sharedstatedir}/cloud
+%dir /run/cloud-init
+%dir /var/lib/cloud
 
 %config(noreplace) %{_sysconfdir}/rsyslog.d/21-cloudinit.conf
 
@@ -147,6 +158,12 @@ fi
 %changelog
 * Mon Jun  2 2014 Garrett Holmstrom <gholms@fedoraproject.org> - 0.7.5-3
 - Make dmidecode dependency arch-dependent [RH:1025071 RH:1067089]
+
+* Mon Jun  2 2014 Garrett Holmstrom <gholms@fedoraproject.org> - 0.7.2-9
+- Write /etc/locale.conf instead of /etc/sysconfig/i18n [RH:1008250]
+- Add tmpfiles.d configuration for /run/cloud-init [RH:1103761]
+- Use the license rpm macro
+- BuildRequire python-setuptools, not python-setuptools-devel
 
 * Fri May 30 2014 Matthew Miller <mattdm@fedoraproject.org> - 0.7.5-2
 - add missing python-jsonpatch dependency [RH:1103281]
