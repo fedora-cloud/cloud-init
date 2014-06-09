@@ -7,7 +7,7 @@
 
 Name:           cloud-init
 Version:        0.7.5
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Cloud instance init scripts
 
 Group:          System Environment/Base
@@ -24,6 +24,9 @@ Patch0:         cloud-init-0.7.5-fedora.patch
 # Fix rsyslog log filtering
 # https://code.launchpad.net/~gholms/cloud-init/rsyslog-programname/+merge/186906
 Patch1:         cloud-init-0.7.5-rsyslog-programname.patch
+
+# Systemd 213 removed the --quiet option from ``udevadm settle''
+Patch2:         cloud-init-0.7.5-udevadm-quiet.patch
 
 # Deal with noarch -> arch
 # https://bugzilla.redhat.com/show_bug.cgi?id=1067089
@@ -67,6 +70,7 @@ ssh keys and to let the user run various scripts.
 %setup -q -n %{name}-%{version}
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 cp -p %{SOURCE2} README.fedora
 
@@ -156,6 +160,9 @@ fi
 
 
 %changelog
+* Mon Jun  9 2014 Garrett Holmstrom <gholms@fedoraproject.org> - 0.7.5-5
+- Stopped calling ``udevadm settle'' with --quiet since systemd 213 removed it
+
 * Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.7.5-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
 
